@@ -27,7 +27,8 @@ public class PlayerCombat : MonoBehaviour
             if (Physics.Raycast(originMouse, out hit))
             {
                 Vector3 playerToHitDirection = hit.point - transform.position;
-                gameObject.transform.forward = playerToHitDirection.normalized;
+                Vector3 normalizedDirection = playerToHitDirection.normalized;
+                gameObject.transform.forward = new Vector3(normalizedDirection.x, 0, normalizedDirection.z);
             }
         }
         else

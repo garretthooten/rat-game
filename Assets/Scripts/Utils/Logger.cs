@@ -12,7 +12,7 @@ public class Logger
         return stackTrace.GetFrame(0).GetMethod().DeclaringType.Name;
     }
 
-    public static void Debug(string message)
+    public static void Info(string message)
     {
         #if UNITY_EDITOR
             string callerName = GetCallerName();

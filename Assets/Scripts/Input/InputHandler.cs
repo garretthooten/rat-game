@@ -42,7 +42,7 @@ public class InputHandler : MonoBehaviour
     {
         if (debugText)
         {
-            debugText.text = $"Move: {move}";
+            debugText.text = $"Move: {move}\nAttack: {attack}";
         }
     }
 
@@ -53,6 +53,9 @@ public class InputHandler : MonoBehaviour
 
     void OnAttack(InputAction.CallbackContext context)
     {
-        attack = _attackAction.ReadValue<bool>();
+        if (context.phase == InputActionPhase.Performed)
+            attack = true;
+        else if (context.phase == InputActionPhase.Canceled)
+            attack = false;
     }
 }

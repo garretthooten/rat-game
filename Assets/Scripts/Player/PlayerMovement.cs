@@ -19,14 +19,12 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!_playerCombat.isAttacking)
+        if (_inputHandler.move != Vector2.zero)
         {
-            if (_inputHandler.move != Vector2.zero)
-            {
-                Vector3 adjustedDirection = new Vector3(_inputHandler.move.x, 0f, _inputHandler.move.y);
+            Vector3 adjustedDirection = new Vector3(_inputHandler.move.x, 0f, _inputHandler.move.y);
+            if(!_playerCombat.isAttacking)
                 gameObject.transform.forward = adjustedDirection;
-                _controller.Move(adjustedDirection * Time.deltaTime * moveSpeed);
-            }
+            _controller.Move(adjustedDirection * Time.deltaTime * moveSpeed);
         }
     }
 }
