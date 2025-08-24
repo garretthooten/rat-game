@@ -6,6 +6,7 @@ public class PlayerCombat : MonoBehaviour
 
     private  InputHandler _input;
     public bool isAttacking;
+    public Gun currentGun;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -29,7 +30,14 @@ public class PlayerCombat : MonoBehaviour
                 Vector3 playerToHitDirection = hit.point - transform.position;
                 Vector3 normalizedDirection = playerToHitDirection.normalized;
                 gameObject.transform.forward = new Vector3(normalizedDirection.x, 0, normalizedDirection.z);
+                
+                if (currentGun)
+                {
+                    currentGun.Fire(hit.point);
+                }
             }
+
+            
         }
         else
         {
