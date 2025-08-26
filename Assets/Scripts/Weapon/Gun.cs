@@ -10,9 +10,11 @@ public class Gun : MonoBehaviour
 
     [SerializeField] protected Firetype _fireType;
     [SerializeField] protected int _maxAmmo;
-    [SerializeField] protected int _maxClipAmmo;
     [SerializeField] protected int _currentAmmo;
+    [SerializeField] protected int _maxClipAmmo;
+    [SerializeField] protected int _currentClipAmmo;
     [SerializeField] protected float _fireRate;
+    [SerializeField] protected float _reloadTime;
 
     [SerializeField] protected Transform _fireTransform;
 
@@ -59,24 +61,25 @@ public class Gun : MonoBehaviour
     {
         _triggerPulled = true;
         float timeSinceLastShot = Time.time - _timeOfLastShot;
-        _canFire = timeSinceLastShot >= _timeBetweenShots && _currentAmmo > 0;
-        Logger.Info($"Entering fire switch with canFire: {_canFire} timeSinceLastShot: {timeSinceLastShot} currentAmmo: {_currentAmmo} lastTriggerPulled: {_lastTriggerPulled}");
+        _canFire = timeSinceLastShot >= _timeBetweenShots && _currentClipAmmo > 0;
         switch (_fireType)
         {
             case Firetype.SemiAutomatic:
                 _canFire = _canFire && (!_lastTriggerPulled);
                 if (_canFire && !_lastFireInput)
                 {
-                    _currentAmmo--;
-                    Logger.Info($"Fire! {_currentAmmo / _maxClipAmmo}");
+                    _currentClipAmmo--;
+                    _timeOfLastShot =  Time.time;
+                    Logger.Info($"Fire! {_currentClipAmmo / _maxClipAmmo}");
                 }
 
                 break;
             case Firetype.FullAutomatic:
                 if (_canFire)
                 {
-                    _currentAmmo--;
-                    Logger.Info($"Fire! {_currentAmmo / _maxClipAmmo}");
+                    _currentClipAmmo--;
+                    _timeOfLastShot =  Time.time;
+                    Logger.Info($"Fire! {_currentClipAmmo / _maxClipAmmo}");
                 }
 
                 break;

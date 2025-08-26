@@ -20,9 +20,6 @@ public class PlayerCombat : MonoBehaviour
     {
         if (_input.attack)
         {
-            Logger.Info($"Attack pressed");
-            isAttacking = true;
-
             Vector2 mousePosition = Mouse.current.position.ReadValue();
             RaycastHit hit;
             var originMouse = Camera.main.ScreenPointToRay(mousePosition);
@@ -42,12 +39,14 @@ public class PlayerCombat : MonoBehaviour
         }
         else
         {
-            if (!_input.attack && _lastAttack && currentGun)
-                Logger.Info($"Releasing gun trigger");
+            if(_lastAttack && currentGun)
                 currentGun.ReleaseTrigger();
-            isAttacking = false;
         }
-
         _lastAttack = _input.attack;
+
+        if (_input.reload)
+        {
+            
+        }
     }
 }

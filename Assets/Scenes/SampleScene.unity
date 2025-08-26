@@ -184,7 +184,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::InputHandler
   move: {x: 0, y: 0}
   attack: 0
-  lastAttack: 0
+  reload: 0
   debugText: {fileID: 267471271}
 --- !u!4 &13378085
 Transform:
@@ -426,9 +426,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Gun
   _fireType: 1
   _maxAmmo: 100
+  _currentAmmo: 100
   _maxClipAmmo: 30
-  _currentAmmo: 30
+  _currentClipAmmo: 30
   _fireRate: 1
+  _reloadTime: 0
   _fireTransform: {fileID: 2082151935}
 --- !u!65 &273238608
 BoxCollider:

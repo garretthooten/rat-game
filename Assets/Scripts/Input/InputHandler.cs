@@ -9,11 +9,12 @@ public class InputHandler : MonoBehaviour
     private PlayerInput _playerInput;
     private InputAction _moveAction;
     private InputAction _attackAction;
+    private InputAction _reloadAction;
 
     public Vector2 move;
 
     public bool attack;
-    public bool lastAttack;
+    public bool reload;
 
     public TMP_Text debugText;
 
@@ -23,11 +24,14 @@ public class InputHandler : MonoBehaviour
         _playerInput = GetComponent<PlayerInput>();
         _moveAction = _playerInput.actions["Move"];
         _attackAction = _playerInput.actions["Attack"];
+        _reloadAction = _playerInput.actions["Reload"];
 
         _moveAction.performed += OnMove;
         _moveAction.canceled += OnMove;
         _attackAction.performed += OnAttack;
         _attackAction.canceled += OnAttack;
+        _reloadAction.performed += OnReload;
+        _reloadAction.canceled += OnReload;
     }
 
     void OnDisable()
@@ -36,6 +40,8 @@ public class InputHandler : MonoBehaviour
         _moveAction.canceled -= OnMove;
         _attackAction.performed -= OnAttack;
         _attackAction.canceled -= OnAttack;
+        _reloadAction.performed -= OnReload;
+        _reloadAction.canceled -= OnReload;
     }
 
     // Update is called once per frame
@@ -43,7 +49,7 @@ public class InputHandler : MonoBehaviour
     {
         if (debugText)
         {
-            debugText.text = $"Move: {move}\nAttack: {attack}";
+            debugText.text = $"Move: {move}\nAttack: {attack}\nReload: {reload}";;
         }
     }
 
@@ -58,5 +64,13 @@ public class InputHandler : MonoBehaviour
             attack = true;
         else if (context.phase == InputActionPhase.Canceled)
             attack = false;
+    }
+
+    void OnReload(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Performed)
+            reload = true;
+        else if (context.phase == InputActionPhase.Canceled)
+            reload = false;
     }
 }
