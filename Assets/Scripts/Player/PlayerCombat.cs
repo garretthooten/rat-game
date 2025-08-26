@@ -5,6 +5,7 @@ public class PlayerCombat : MonoBehaviour
 {
 
     private  InputHandler _input;
+    private bool _lastAttack;
     public bool isAttacking;
     public Gun currentGun;
     
@@ -19,7 +20,7 @@ public class PlayerCombat : MonoBehaviour
     {
         if (_input.attack)
         {
-            Debug.Log($"Attack pressed");
+            Logger.Info($"Attack pressed");
             isAttacking = true;
 
             Vector2 mousePosition = Mouse.current.position.ReadValue();
@@ -33,15 +34,20 @@ public class PlayerCombat : MonoBehaviour
                 
                 if (currentGun)
                 {
+                    Logger.Info($"Pulling gun trigger");
                     currentGun.Fire(hit.point);
                 }
             }
-
             
         }
         else
         {
+            if (!_input.attack && _lastAttack && currentGun)
+                Logger.Info($"Releasing gun trigger");
+                currentGun.ReleaseTrigger();
             isAttacking = false;
         }
+
+        _lastAttack = _input.attack;
     }
 }

@@ -13,6 +13,7 @@ public class InputHandler : MonoBehaviour
     public Vector2 move;
 
     public bool attack;
+    public bool lastAttack;
 
     public TMP_Text debugText;
 

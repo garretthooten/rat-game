@@ -21,6 +21,8 @@ public class Gun : MonoBehaviour
     protected bool _isFiring;
     protected bool _canFire;
     protected bool _lastFireInput;
+    protected bool _triggerPulled;
+    protected bool _lastTriggerPulled;
 
     protected InputHandler _inputHandler;
     protected Camera _camera;
@@ -50,17 +52,19 @@ public class Gun : MonoBehaviour
     void Update()
     {
         _lastFireInput = _inputHandler.attack;
+        _lastTriggerPulled = _triggerPulled;
     }
 
     public void Fire(Vector3 cursorPosition)
     {
-        
+        _triggerPulled = true;
         float timeSinceLastShot = Time.time - _timeOfLastShot;
         _canFire = timeSinceLastShot >= _timeBetweenShots && _currentAmmo > 0;
-        Logger.Info($"Entering fire switch with canFire: {_canFire} timeSinceLastShot: {timeSinceLastShot} currentAmmo: {_currentAmmo}");
+        Logger.Info($"Entering fire switch with canFire: {_canFire} timeSinceLastShot: {timeSinceLastShot} currentAmmo: {_currentAmmo} lastTriggerPulled: {_lastTriggerPulled}");
         switch (_fireType)
         {
             case Firetype.SemiAutomatic:
+                _canFire = _canFire && (!_lastTriggerPulled);
                 if (_canFire && !_lastFireInput)
                 {
                     _currentAmmo--;
@@ -77,6 +81,12 @@ public class Gun : MonoBehaviour
 
                 break;
         }
+    }
+
+    public void ReleaseTrigger()
+    {
+        Logger.Info($"Gun recieved release");
+        _triggerPulled = false;
     }
 
 }

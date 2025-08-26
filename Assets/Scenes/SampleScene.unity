@@ -184,6 +184,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::InputHandler
   move: {x: 0, y: 0}
   attack: 0
+  lastAttack: 0
   debugText: {fileID: 267471271}
 --- !u!4 &13378085
 Transform:
@@ -423,7 +424,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: adf4323c0cb4042b8a1c7a3f2028ad1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Gun
-  _fireType: 0
+  _fireType: 1
   _maxAmmo: 100
   _maxClipAmmo: 30
   _currentAmmo: 30
