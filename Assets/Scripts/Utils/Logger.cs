@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Diagnostics;
 
-public class Logger
+public class MyLogger
 {
 
     private static string GetCallerName()

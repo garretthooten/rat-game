@@ -24,7 +24,7 @@ public class PlayerMovement : MonoBehaviour
             Vector3 adjustedDirection = new Vector3(_inputHandler.move.x, 0f, _inputHandler.move.y);
             if(!_playerCombat.isAttacking)
                 gameObject.transform.forward = adjustedDirection;
-            _controller.Move(adjustedDirection * Time.deltaTime * moveSpeed);
+            _controller.Move(adjustedDirection * moveSpeed * Time.deltaTime);
         }
     }
 }
