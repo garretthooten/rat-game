@@ -11,14 +11,22 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] private LayerMask _layerMask;
     [SerializeField] private int _ignoreLayer = 2;
     [SerializeField] private TMP_Text _debugText;
+    [SerializeField] private Transform _weaponAttachTransform;
+    private int _selectedWeaponIndex = 1;
     public bool isAttacking;
     public Gun currentGun;
-    public Gun[] weaponInventory;
+    public GameObject[] weaponInventory; // must have gun component
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
         _input = GetComponent<InputHandler>();
+        if (!_weaponAttachTransform)
+        {
+            MyLogger.Error("Failed to get weapon attach transform");
+        }
+        
+        ChangeWeapons();
     }
 
     void MakeCursorMarker(Vector3 point)
@@ -43,6 +51,11 @@ public class PlayerCombat : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (_selectedWeaponIndex != _input.selectedWeapon - 1)
+        {
+            ChangeWeapons();
+        }
+        
         if (_input.attack)
         {
             isAttacking = true;
@@ -88,6 +101,29 @@ public class PlayerCombat : MonoBehaviour
         {
             _debugText.text = MakeDebugString();
         }
+    }
+
+    private void ChangeWeapons()
+    {
+        if (_input.selectedWeapon > weaponInventory.Length)
+        {
+            MyLogger.Error("Selected weapon outside of inventory range");
+            return;
+        }
+
+        _selectedWeaponIndex = _input.selectedWeapon - 1;
+        
+        // Deactivate current gun
+        currentGun.gameObject.SetActive(false);
+        
+        // Activate new gun (? )
+        weaponInventory[_selectedWeaponIndex].gameObject.SetActive(true);
+        currentGun = weaponInventory[_selectedWeaponIndex].GetComponent<Gun>();
+        
+        // Align new gun with attachtransform
+        Vector3 difference = currentGun.attachTransform.position - _weaponAttachTransform.transform.position;
+        currentGun.transform.position -= difference;
+        currentGun.transform.SetParent(_weaponAttachTransform, true);
     }
 
     private string MakeDebugString()

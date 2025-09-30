@@ -1,0 +1,28 @@
+common - white
+energy drink - increase attack speed by 1.5%, stacks additively 
+cheese cube - heals a small amount of hp
+photo of a lady - adds 10 hp
+spray bottle - increases knockback of player damage by 0.5%
+
+uncommon - light green
+Lucky Rodent's Foot - Slightly increases luck
+RatCoin NFTs - Increase RatCoin gain on kill by 5
+full wheel of cheese - heals half of missing hp
+rat fur coat - add 0.5 def
+photo of a hot lady - increases hp by 4%, stacks additively 
+attachable rat tail - increases speed by 1%, stacks additively
+
+rare - light blue
+year of the rat red envelope - increase RatCoin gain by 5%, stacks additively
+rat skull - increases def by 1%, stacks additively
+gamer supplements - increases attack speed by 5%, stacks additively
+Lab Rat - Trained to find the cheese, Summon Ally Rodents to collect nearby healing items, upgrades slightly increase speed of all Ally Rodents
+
+very rare - purple
+rat poison - leave a trail of rat poison that applies Plague to Rodents while they're touching the powder. remnants despawn over time, upgrades increase size of the powder as well as time it stays on field
+incel aura - damages all enemy Rodents in a small radius around the player, upgrades slightly increase radius and damage
+Rat Radicalist - Summons Ally Rodent every 30s, they will hone in on nearest enemy Rodent and explode upon contact doing Explosion damage, upgrades increase Explosion damage and slightly decrease cool down
+
+mythical - gold
+Statue of Ninkilim - Summon Ally Rodents, they will attack the nearest enemy to them, can not attack the same enemy unless it's a Boss Rodent, start with 2 Rodents, upgrades add 1 Rodent (Max of 7) and slightly increases damage and attack speed of all ally Rodents
+A Signed Photo of Cheesus Christ - Every 30s player is Cleansed of all status effects along with restoring a small amount of hp, upgrades increase HP restore amount

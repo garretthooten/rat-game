@@ -9,6 +9,8 @@ public class Gun : MonoBehaviour
         SemiAutomatic
     }
 
+    public Transform attachTransform;
+
     [SerializeField] protected Firetype _fireType;
     [SerializeField] protected int _maxAmmo;
     [SerializeField] protected int _currentAmmo;

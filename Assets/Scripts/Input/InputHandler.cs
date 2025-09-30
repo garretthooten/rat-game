@@ -36,6 +36,7 @@ public class InputHandler : MonoBehaviour
         _attackAction.canceled += OnAttack;
         _reloadAction.performed += OnReload;
         _reloadAction.canceled += OnReload;
+        // makethis a consumabel input?
         _weaponSelectAction.performed += OnWeaponSelect;
     }
 
