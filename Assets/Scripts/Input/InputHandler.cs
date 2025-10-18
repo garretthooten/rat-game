@@ -11,11 +11,13 @@ public class InputHandler : MonoBehaviour
     private InputAction _attackAction;
     private InputAction _reloadAction;
     private InputAction _weaponSelectAction;
+    private InputAction _jumpAction;
 
     public Vector2 move;
 
     public bool attack;
     public bool reload;
+    public bool jump;
 
     public int selectedWeapon = 1;
 
@@ -29,6 +31,7 @@ public class InputHandler : MonoBehaviour
         _attackAction = _playerInput.actions["Attack"];
         _reloadAction = _playerInput.actions["Reload"];
         _weaponSelectAction = _playerInput.actions["Weapon Select"];
+        _jumpAction = _playerInput.actions["Jump"];
 
         _moveAction.performed += OnMove;
         _moveAction.canceled += OnMove;
@@ -38,6 +41,8 @@ public class InputHandler : MonoBehaviour
         _reloadAction.canceled += OnReload;
         // makethis a consumabel input?
         _weaponSelectAction.performed += OnWeaponSelect;
+        _jumpAction.performed += OnJump;
+        _jumpAction.canceled += OnJump;
     }
 
     void OnDisable()
@@ -49,6 +54,8 @@ public class InputHandler : MonoBehaviour
         _reloadAction.performed -= OnReload;
         _reloadAction.canceled -= OnReload;
         _weaponSelectAction.performed -= OnWeaponSelect;
+        _jumpAction.performed -= OnJump;
+        _jumpAction.canceled -= OnJump;
     }
 
     // Update is called once per frame
@@ -56,7 +63,7 @@ public class InputHandler : MonoBehaviour
     {
         if (debugText)
         {
-            debugText.text = $"Move: {move}\nAttack: {attack}\nReload: {reload}";;
+            debugText.text = $"Move: {move}\nAttack: {attack}\nReload: {reload}\nJump: {jump}";;
         }
     }
 
@@ -93,5 +100,13 @@ public class InputHandler : MonoBehaviour
             else if (control == keyboard.digit5Key) selectedWeapon = 5;
             else if (control == keyboard.digit6Key) selectedWeapon = 6;
         }
+    }
+
+    void OnJump(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Performed)
+            jump = true;
+        else if (context.phase == InputActionPhase.Canceled)
+            jump = false;
     }
 }

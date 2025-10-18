@@ -10,6 +10,7 @@ public class Gun : MonoBehaviour
     }
 
     public Transform attachTransform;
+    public float damage = 20f;
 
     [SerializeField] protected Firetype _fireType;
     [SerializeField] protected int _maxAmmo;
@@ -23,6 +24,8 @@ public class Gun : MonoBehaviour
 
     [SerializeField] protected Transform _fireTransform;
     [SerializeField] protected GameObject _bulletVisualizerPrefab;
+    [SerializeField] protected LayerMask _shotLayerMask;
+    [SerializeField] protected string layerCanTakeDamage = "Rat";
 
     protected float _timeBetweenShots;
     protected float _timeOfLastShot;
@@ -112,6 +115,13 @@ public class Gun : MonoBehaviour
         RaycastHit hit;
         if (Physics.SphereCast(_fireTransform.position, _bulletRadius, shotDirection, out hit))
         {
+            Debug.Log($"Hit {hit.transform.name}, {hit.transform.tag}");
+            if (hit.transform.TryGetComponent(out Health health))
+            {
+                health.TakeDamage(damage);
+            }
+                
+            
             GameObject bulletVisualizer = Instantiate(_bulletVisualizerPrefab);
             LineRenderer lineRenderer = bulletVisualizer.GetComponent<LineRenderer>();
 
