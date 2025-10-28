@@ -1,49 +1,70 @@
+using System.Collections;
+using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class BasicRatAttack : MonoBehaviour
 {
-    private PlayerHealth _playerHealth;
+    
+    [SerializeField] private PlayerHealth _playerHealth;
+    private BasicRatNavigation _basicRatNavigation;
     private Transform _playerTransform;
-    
-    [SerializeField] private float _attackDistance = 0.2f;
-    [SerializeField] private float _attackDamage = 10f;
-    [SerializeField] private float _timeBetweenAttacks = 1f;
-    [SerializeField] private BoxCollider _hurtbox;
-    private BasicRatNavigation _navigation;
+    private AudioSource _audioSource;
+
+    [SerializeField] private SingleHitBox _attackBox;
+    //[SerializeField] private BoxCollider _attackBox;
+    [SerializeField] private float attackDistance = 2.0f;
+    [SerializeField] private float _attackDuration = 1.0f;
+    [SerializeField] private float _attackCooldown = 2.0f;
+    [FormerlySerializedAs("_isAttacking")] public bool isAttacking = false;
     private float _timeOfLastAttack;
+
+    public void Awake()
+    {
+        if (!_attackBox)
+        {
+            MyLogger.Error("_attackBox is missing!");
+        }
+
+        if (!_audioSource)
+        {
+            _audioSource = GetComponent<AudioSource>();
+        }
+
+        if (!_basicRatNavigation)
+        {
+            _basicRatNavigation = GetComponent<BasicRatNavigation>();
+        }
+    }
     
-    void Awake()
+    public void Start()
     {
-        if (_hurtbox == null)
-        {
-            MyLogger.Error($"Hurtbox is null");
-        }
-
-        _playerHealth = PlayerHealth.instance;
+        _playerHealth = PlayerHealth.GetPlayerHealthInstance();
         _playerTransform = _playerHealth.transform;
-        if(_playerHealth == null)
-        {
-            MyLogger.Error($"PlayerHealth is null");
-        }
+    }
 
+    public void Update()
+    {
+        float distanceToPlayer = Vector3.Distance(_playerTransform.position, transform.position);
+        if (distanceToPlayer <= attackDistance && !isAttacking)
+        {
+            float timeSinceLastAttack = Time.time - _timeOfLastAttack;
+            MyLogger.Info($"Within attack distance, time since attack: {timeSinceLastAttack}s");
+            if (timeSinceLastAttack < _attackCooldown)
+                return; // not going to work when there is more logic for more complex behaviors, but this is good for now
+            StartCoroutine(Attack());
+        }
+    }
+
+    IEnumerator Attack()
+    {
+        isAttacking = true;
         _timeOfLastAttack = Time.time;
+        _audioSource.Play();
+        _attackBox.EnableAttack();
+        yield return new WaitForSeconds(_attackDuration);
+        _attackBox.DisableAttack();
+        isAttacking = false;
     }
-
-    void Update()
-    {
-        // float distance = Vector3.Distance(transform.position, _playerTransform.position);
-        // if (distance <= _attackDistance)
-        // {
-        //     MyLogger.Info("Attacking player!");
-        // }
-    }
-
-    void OnTriggerEnter(Collider other)
-    {
-        MyLogger.Info($"Trigger enter {other.gameObject.name}");
-        if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
-        {
-            _playerHealth.Damage(_attackDamage);
-        }
-    }
+    
 }

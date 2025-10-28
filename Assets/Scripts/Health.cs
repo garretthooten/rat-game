@@ -17,6 +17,11 @@ public class Health : MonoBehaviour
         if (currentHealth <= 0)
         {
             // death stuff later
+            BasicRatNavigation navigation = GetComponent<BasicRatNavigation>();
+            if (navigation)
+            {
+                navigation.BeginDeath();
+            }
             MyLogger.Info($"{gameObject.name} dying!");
             Destroy(gameObject);
         }

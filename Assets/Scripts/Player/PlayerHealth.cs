@@ -40,6 +40,7 @@ public class PlayerHealth : MonoBehaviour
         if (debugText)
         {
             string healthText = $"Health: {currentHealth}/{maxHealth}";
+            debugText.text = healthText;
         }
     }
 
