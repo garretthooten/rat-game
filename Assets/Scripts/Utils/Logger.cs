@@ -15,24 +15,24 @@ public class MyLogger
     public static void Info(string message)
     {
         #if UNITY_EDITOR
-            string callerName = GetCallerName();
-            UnityEngine.Debug.Log($"[{callerName}] {message}");
+            // string callerName = GetCallerName();
+            // UnityEngine.Debug.Log($"[{callerName}] {message}");
         #endif
     }
 
     public static void Warning(string message)
     {
         #if UNITY_EDITOR
-            string callerName = GetCallerName();
-            UnityEngine.Debug.Log($"[{callerName}] {message}");
+            // string callerName = GetCallerName();
+            // UnityEngine.Debug.Log($"[{callerName}] {message}");
         #endif
     }
 
     public static void Error(string message)
     {
         #if UNITY_EDITOR
-                string callerName = GetCallerName();
-                UnityEngine.Debug.Log($"[{callerName}] {message}");
+                // string callerName = GetCallerName();
+                // UnityEngine.Debug.Log($"[{callerName}] {message}");
         #endif
     }
 

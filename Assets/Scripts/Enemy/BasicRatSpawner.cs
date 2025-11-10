@@ -9,19 +9,21 @@ public class BasicRatSpawner : MonoBehaviour
     
     private float _timeBetweenSpawns;
     private float _timeOfLastSpawn;
+    private Coroutine _spawnCoroutine;
     
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Awake()
+    void OnEnable()
     {
         _timeBetweenSpawns = 1 / _ratsPerSecond;
         MyLogger.Info($"Creating rat spawner with {_ratsPerSecond} RPS, one spawn every {_timeBetweenSpawns} seconds");
-        StartCoroutine(SpawnRoutine());
+        _spawnCoroutine = StartCoroutine(SpawnRoutine());
     }
 
-    void OnDestroy()
+    void OnDisable()
     {
-        StopCoroutine(SpawnRoutine());
+        if(_spawnCoroutine != null)
+            StopCoroutine(_spawnCoroutine);
     }
 
     // Update is called once per frame

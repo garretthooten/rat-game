@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public bool CanMove = true;
+    
     public float moveSpeed = 10.0f;
     public float gravity = -9.8f;
     public float gravityMultiplier = 1.0f;
@@ -21,17 +23,23 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (_inputHandler.move != Vector2.zero)
+        Vector3 move = Vector3.zero;
+        if (CanMove)
         {
-            Vector3 adjustedDirection = new Vector3(_inputHandler.move.x, 0f, _inputHandler.move.y);
-            if(!_playerCombat.isAttacking)
-                gameObject.transform.forward = adjustedDirection;
-            // Vector3 movement = new Vector3(adjustedDirection.x * moveSpeed * Time.deltaTime, gravity * Time.deltaTime,
-            //     adjustedDirection.z * moveSpeed * Time.deltaTime);
-            // _controller.Move(movement);
-            _controller.Move(adjustedDirection * moveSpeed * Time.deltaTime);
+            if (_inputHandler.move != Vector2.zero)
+            {
+                Vector3 adjustedDirection = new Vector3(_inputHandler.move.x, 0f, _inputHandler.move.y);
+                if (!_playerCombat.isAttacking)
+                    gameObject.transform.forward = adjustedDirection;
+                move += adjustedDirection * moveSpeed;
+            }
         }
 
-        _controller.Move(new Vector3(0f, gravity * Time.deltaTime, 0f));
+        move.y = gravity * gravityMultiplier;
+        _controller.Move(move * Time.deltaTime);
+        
+        // temp debugging
+        //Vector3 move = new Vector3(_inputHandler.move.x, 0f, _inputHandler.move.y);
+        //_controller.Move(move * moveSpeed * Time.deltaTime);
     }
 }
