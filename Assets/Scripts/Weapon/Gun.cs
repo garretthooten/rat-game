@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
+[RequireComponent(typeof(AudioSource))]
 public class Gun : MonoBehaviour
 {
     public enum Firetype
@@ -27,6 +28,16 @@ public class Gun : MonoBehaviour
     [SerializeField] protected LayerMask _shotLayerMask;
     [SerializeField] protected string layerCanTakeDamage = "Rat";
 
+    [Header("Bullet Trail and Impact")]
+    [SerializeField] protected ParticleSystem _muzzleFlash;
+    [SerializeField] protected GameObject _bulletTrailPrefab;
+
+    [Header("Audio")] 
+    [SerializeField] [Range(0f, 1f)] protected float _sfxVolume = 0.7f;
+    [SerializeField] protected AudioSource _audioSource;
+    [SerializeField] protected AudioClip _fireSound;
+    [SerializeField] protected AudioClip _emptyClipSound;
+    
     protected float _timeBetweenShots;
     protected float _timeOfLastShot;
     protected bool _canFire;
@@ -46,6 +57,11 @@ public class Gun : MonoBehaviour
         if (!_camera)
         {
             MyLogger.Error("Failed to find camera");
+        }
+
+        if (!_audioSource)
+        {
+            _audioSource = GetComponent<AudioSource>();
         }
 
         if (!_inputHandler)
@@ -94,6 +110,10 @@ public class Gun : MonoBehaviour
                     _timeOfLastShot = Time.time;
                     FireHitscanShot(_cursorPosition);
                 }
+                else if (_currentClipAmmo <= 0 && !_lastTriggerPulled)
+                {
+                    _audioSource.PlayOneShot(_emptyClipSound, _sfxVolume);
+                }
 
                 break;
             case Firetype.FullAutomatic:
@@ -103,6 +123,10 @@ public class Gun : MonoBehaviour
                     _timeOfLastShot = Time.time;
                     FireHitscanShot(_cursorPosition);
                     //MyLogger.Info($"Fire! {_currentClipAmmo} / {_maxClipAmmo}");
+                }
+                else if (_currentClipAmmo <= 0 && !_lastTriggerPulled)
+                {
+                    _audioSource.PlayOneShot(_emptyClipSound, _sfxVolume);
                 }
 
                 break;
@@ -122,17 +146,27 @@ public class Gun : MonoBehaviour
             }
                 
             
-            GameObject bulletVisualizer = Instantiate(_bulletVisualizerPrefab);
-            LineRenderer lineRenderer = bulletVisualizer.GetComponent<LineRenderer>();
+            // GameObject bulletVisualizer = Instantiate(_bulletVisualizerPrefab);
+            // LineRenderer lineRenderer = bulletVisualizer.GetComponent<LineRenderer>();
+            //
+            // lineRenderer.positionCount = 2;
+            // lineRenderer.SetPosition(0, _fireTransform.position);
+            // lineRenderer.SetPosition(1, cursorPosition);
+            // lineRenderer.startWidth = _bulletRadius * 2;
+            // lineRenderer.endWidth = _bulletRadius * 2;
 
-            lineRenderer.positionCount = 2;
-            lineRenderer.SetPosition(0, _fireTransform.position);
-            lineRenderer.SetPosition(1, cursorPosition);
-            lineRenderer.startWidth = _bulletRadius * 2;
-            lineRenderer.endWidth = _bulletRadius * 2;
-
-            StartCoroutine(StartBulletVisualizeTimer(bulletVisualizer));
+            //StartCoroutine(StartBulletVisualizeTimer(bulletVisualizer));
         }
+
+        if (_bulletTrailPrefab)
+        {
+            GameObject bulletTrail = Instantiate(_bulletTrailPrefab);
+            bulletTrail.GetComponent<BulletTrail>().MoveTrail(_fireTransform.position, hit.point);
+        }
+
+        if (_muzzleFlash)
+            _muzzleFlash.Play();
+        _audioSource.PlayOneShot(_fireSound, _sfxVolume);
     }
 
     public void PullTrigger(Vector3 cursorPosition)
