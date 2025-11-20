@@ -12,12 +12,14 @@ public class InputHandler : MonoBehaviour
     private InputAction _reloadAction;
     private InputAction _weaponSelectAction;
     private InputAction _jumpAction;
+    private InputAction _dashAction;
 
     public Vector2 move;
 
     public bool attack;
     public bool reload;
     public bool jump;
+    public bool dash;
 
     public int selectedWeapon = 1;
 
@@ -32,6 +34,7 @@ public class InputHandler : MonoBehaviour
         _reloadAction = _playerInput.actions["Reload"];
         _weaponSelectAction = _playerInput.actions["Weapon Select"];
         _jumpAction = _playerInput.actions["Jump"];
+        _dashAction = _playerInput.actions["Dash"];
 
         _moveAction.performed += OnMove;
         _moveAction.canceled += OnMove;
@@ -43,6 +46,8 @@ public class InputHandler : MonoBehaviour
         _weaponSelectAction.performed += OnWeaponSelect;
         _jumpAction.performed += OnJump;
         _jumpAction.canceled += OnJump;
+        _dashAction.performed += OnDash;
+        _dashAction.canceled += OnDash;
     }
 
     void OnDisable()
@@ -56,6 +61,8 @@ public class InputHandler : MonoBehaviour
         _weaponSelectAction.performed -= OnWeaponSelect;
         _jumpAction.performed -= OnJump;
         _jumpAction.canceled -= OnJump;
+        _dashAction.performed -= OnDash;
+        _dashAction.canceled -= OnDash;
     }
 
     // Update is called once per frame
@@ -63,7 +70,7 @@ public class InputHandler : MonoBehaviour
     {
         if (debugText)
         {
-            debugText.text = $"Move: {move}\nAttack: {attack}\nReload: {reload}\nJump: {jump}";;
+            debugText.text = $"Move: {move}\nAttack: {attack}\nReload: {reload}\nJump: {jump}\nDash: {dash}";;
         }
     }
 
@@ -108,5 +115,13 @@ public class InputHandler : MonoBehaviour
             jump = true;
         else if (context.phase == InputActionPhase.Canceled)
             jump = false;
+    }
+    
+    void OnDash(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Performed)
+            dash = true;
+        else if (context.phase == InputActionPhase.Canceled)
+            dash = false;
     }
 }

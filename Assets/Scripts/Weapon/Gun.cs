@@ -139,7 +139,7 @@ public class Gun : MonoBehaviour
         RaycastHit hit;
         if (Physics.SphereCast(_fireTransform.position, _bulletRadius, shotDirection, out hit))
         {
-            Debug.Log($"Hit {hit.transform.name}, {hit.transform.tag}");
+            //Debug.Log($"Hit {hit.transform.name}, {hit.transform.tag}");
             if (hit.transform.TryGetComponent(out Health health))
             {
                 health.TakeDamage(damage);
