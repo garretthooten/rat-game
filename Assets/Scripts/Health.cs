@@ -1,9 +1,16 @@
+using System;
 using UnityEngine;
 
 public class Health : MonoBehaviour
 {
     public float maxHealth = 100f;
     public float currentHealth;
+
+    public event Action<Health> OnDeath;
+
+    //probably not the place to store this but whatever
+    public GameObject damageParticleSystemPrefab;
+    public ParticleSystem damageParticle;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
@@ -23,13 +30,27 @@ public class Health : MonoBehaviour
                 navigation.BeginDeath();
             }
             MyLogger.Info($"{gameObject.name} dying!");
+            OnDeath?.Invoke(this);
             Destroy(gameObject);
         }
     }
 
-    public void TakeDamage(float damage)
+    public void TakeDamage(float damage, Vector3 impactPoint = default(Vector3) , Vector3 impactNormal = default(Vector3))
     {
         MyLogger.Info($"Damage dealt to {gameObject.name}: {damage}");
         currentHealth -= damage;
+
+        if (impactPoint != default(Vector3) && impactNormal != default(Vector3))
+        {
+            if (!damageParticle)
+            {
+                damageParticle = Instantiate(damageParticleSystemPrefab).GetComponent<ParticleSystem>();
+                damageParticle.transform.SetParent(transform, true);
+            }
+            Debug.Log("Got normal and stuff");
+            damageParticle.transform.position = impactPoint;
+            damageParticle.transform.forward = impactNormal;
+            damageParticle.Play();
+        }
     }
 }

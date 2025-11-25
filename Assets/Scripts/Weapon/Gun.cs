@@ -108,7 +108,9 @@ public class Gun : MonoBehaviour
                 {
                     _currentClipAmmo--;
                     _timeOfLastShot = Time.time;
-                    FireHitscanShot(_cursorPosition);
+                    Vector3 newCursorPosition = new Vector3(_cursorPosition.x, 0.5f, _cursorPosition.z);
+                    Debug.Log($"Cursor location: {_cursorPosition}, new cursor location: {newCursorPosition}");
+                    FireHitscanShot(newCursorPosition);
                 }
                 else if (_currentClipAmmo <= 0 && !_lastTriggerPulled)
                 {
@@ -136,13 +138,14 @@ public class Gun : MonoBehaviour
     public void FireHitscanShot(Vector3 cursorPosition)
     {
         Vector3 shotDirection = cursorPosition - _fireTransform.position;
+        //shotDirection = new Vector3(shotDirection.x, 0f, shotDirection.z);
         RaycastHit hit;
         if (Physics.SphereCast(_fireTransform.position, _bulletRadius, shotDirection, out hit))
         {
             //Debug.Log($"Hit {hit.transform.name}, {hit.transform.tag}");
             if (hit.transform.TryGetComponent(out Health health))
             {
-                health.TakeDamage(damage);
+                health.TakeDamage(damage, hit.point, hit.normal);
             }
                 
             

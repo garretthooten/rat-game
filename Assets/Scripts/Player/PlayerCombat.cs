@@ -65,7 +65,7 @@ public class PlayerCombat : MonoBehaviour
             if (Physics.Raycast(originMouse, out hit))
             {
                 // visualize hit point
-                MakeCursorMarker(hit.point);
+                //MakeCursorMarker(hit.point);
                 
                 Vector3 playerToHitDirection = hit.point - transform.position;
                 Vector3 normalizedDirection = playerToHitDirection.normalized;

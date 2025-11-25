@@ -10,6 +10,8 @@ public class BasicRatNavigation : MonoBehaviour
     public NavMeshAgent agent;
     public bool canMove = true;
     public bool isAttacking = false;
+    public float destinationCalcInterval = 0.25f;
+    private float _timeOfLastDestinationCalc;
 
     [SerializeField] private BasicRatAttack _ratCombat;
     [SerializeField] private TMP_Text _debugText;
@@ -29,9 +31,10 @@ public class BasicRatNavigation : MonoBehaviour
     {
         if (_ratCombat != null)
             canMove = !_ratCombat.isAttacking;
-        if (target && canMove)
+        if (target && canMove && (Time.time - _timeOfLastDestinationCalc) > destinationCalcInterval)
         {
             agent.SetDestination(target.position);
+            _timeOfLastDestinationCalc = Time.time;
         }
     }
 

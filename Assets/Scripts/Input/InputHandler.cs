@@ -3,6 +3,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using System;
 
 public class InputHandler : MonoBehaviour
 {
@@ -24,6 +25,9 @@ public class InputHandler : MonoBehaviour
     public int selectedWeapon = 1;
 
     public TMP_Text debugText;
+
+    // subscribe actions
+    public event Action OnDashInput;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
@@ -120,7 +124,10 @@ public class InputHandler : MonoBehaviour
     void OnDash(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
+        {
             dash = true;
+            OnDashInput?.Invoke();
+        }
         else if (context.phase == InputActionPhase.Canceled)
             dash = false;
     }
