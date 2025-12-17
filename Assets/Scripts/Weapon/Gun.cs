@@ -50,6 +50,9 @@ public class Gun : MonoBehaviour
     protected InputHandler _inputHandler;
     protected Camera _camera;
 
+    //temp remove this
+    private GameObject _cursorVisualizer;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
@@ -108,7 +111,10 @@ public class Gun : MonoBehaviour
                 {
                     _currentClipAmmo--;
                     _timeOfLastShot = Time.time;
-                    Vector3 newCursorPosition = new Vector3(_cursorPosition.x, 0.5f, _cursorPosition.z);
+                    Vector3 newCursorPosition = new Vector3(_cursorPosition.x, _fireTransform.position.y, _cursorPosition.z);
+                    _cursorVisualizer = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                    _cursorVisualizer.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+                    _cursorVisualizer.transform.position = newCursorPosition;
                     Debug.Log($"Cursor location: {_cursorPosition}, new cursor location: {newCursorPosition}");
                     FireHitscanShot(newCursorPosition);
                 }
@@ -138,9 +144,19 @@ public class Gun : MonoBehaviour
     public void FireHitscanShot(Vector3 cursorPosition)
     {
         Vector3 shotDirection = cursorPosition - _fireTransform.position;
+        //GameObject beginMarker = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+        //beginMarker.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+        //beginMarker.transform.position = _fireTransform.position;
+        //beginMarker.gameObject.name = "Begin Shot";
+
+        //GameObject endMarker = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        //endMarker.transform.position = _fireTransform.position + shotDirection;
+        //endMarker.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+        //endMarker.gameObject.name = "End Shot";
         //shotDirection = new Vector3(shotDirection.x, 0f, shotDirection.z);
         RaycastHit hit;
-        if (Physics.SphereCast(_fireTransform.position, _bulletRadius, shotDirection, out hit))
+        //if (Physics.SphereCast(_fireTransform.position, _bulletRadius, shotDirection, out hit))
+        if(Physics.CapsuleCast(new Vector3(_fireTransform.position.x, 100f, _fireTransform.position.z), new Vector3(_fireTransform.position.x, -100f, _fireTransform.position.z), _bulletRadius, shotDirection.normalized, out hit, 100f))
         {
             //Debug.Log($"Hit {hit.transform.name}, {hit.transform.tag}");
             if (hit.transform.TryGetComponent(out Health health))
@@ -164,7 +180,16 @@ public class Gun : MonoBehaviour
         if (_bulletTrailPrefab)
         {
             GameObject bulletTrail = Instantiate(_bulletTrailPrefab);
-            bulletTrail.GetComponent<BulletTrail>().MoveTrail(_fireTransform.position, hit.point);
+            Vector3 trailEndpoint;
+            if (hit.transform)
+            {
+                trailEndpoint = hit.point;
+            }
+            else 
+            {
+                trailEndpoint = _fireTransform.position + (_fireTransform.forward * 100f);
+            }
+            bulletTrail.GetComponent<BulletTrail>().MoveTrail(_fireTransform.position, trailEndpoint);
         }
 
         if (_muzzleFlash)
@@ -182,6 +207,11 @@ public class Gun : MonoBehaviour
     {
         _triggerPulled = false;
         _cursorPosition = Vector3.zero;
+
+        if(_cursorVisualizer != null)
+        {
+            Destroy(_cursorVisualizer.gameObject);
+        }
     }
 
     public void Reload()
