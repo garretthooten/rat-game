@@ -111,7 +111,7 @@ public class Gun : MonoBehaviour
                 {
                     _currentClipAmmo--;
                     _timeOfLastShot = Time.time;
-                    Vector3 newCursorPosition = new Vector3(_cursorPosition.x, _fireTransform.position.y, _cursorPosition.z);
+                    Vector3 newCursorPosition = new Vector3(_cursorPosition.x - (_fireTransform.position.y), _fireTransform.position.y, _cursorPosition.z - (_fireTransform.position.y));
                     _cursorVisualizer = GameObject.CreatePrimitive(PrimitiveType.Sphere);
                     _cursorVisualizer.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
                     _cursorVisualizer.transform.position = newCursorPosition;
