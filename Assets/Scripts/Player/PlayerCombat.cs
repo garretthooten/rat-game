@@ -112,7 +112,7 @@ public class PlayerCombat : MonoBehaviour
         }
 
         _selectedWeaponIndex = _input.selectedWeapon - 1;
-        
+
         // Deactivate current gun
         currentGun.gameObject.SetActive(false);
         

@@ -5,7 +5,8 @@ public class BasicRatSpawner : MonoBehaviour
 {
     public int currentRatCount = 0;
     public int maxRatCount = 100;
-    
+
+    [SerializeField] private ObjectPool _ratPool;
     [SerializeField] private GameObject _ratPrefab;
     [SerializeField] private int _ratsPerSecond = 1;
     [SerializeField] private Transform _ratSpawnPoint;
@@ -41,7 +42,10 @@ public class BasicRatSpawner : MonoBehaviour
         {
             if (currentRatCount < maxRatCount)
             {
-                GameObject rat = Instantiate(_ratPrefab, _ratSpawnPoint.position, _ratSpawnPoint.rotation);
+                GameObject rat = _ratPool.GetObject();
+                rat.transform.position = _ratSpawnPoint.position;
+                rat.transform.rotation = _ratSpawnPoint.rotation;
+                //GameObject rat = Instantiate(_ratPrefab, _ratSpawnPoint.position, _ratSpawnPoint.rotation);
                 rat.GetComponent<Health>().OnDeath += HandleRatDeath;
                 currentRatCount++;
             }

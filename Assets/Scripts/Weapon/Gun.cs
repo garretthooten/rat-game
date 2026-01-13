@@ -57,7 +57,6 @@ public class Gun : MonoBehaviour
     [SerializeField] private Material _visualizerMaterial;
     [SerializeField] private float _cursorOffsetMultiplier = 1.0f;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
         _camera = Camera.main;
@@ -80,9 +79,6 @@ public class Gun : MonoBehaviour
 
         if (!_bulletVisualizerPrefab)
         {
-            // _bulletVisualizer = GetComponent<LineRenderer>();
-            // if(!_bulletVisualizer)
-            //     MyLogger.Error("Failed to find bullet visualizer");
             MyLogger.Error("Failed to find bullet visualizer prefab");
         }
 
@@ -92,7 +88,11 @@ public class Gun : MonoBehaviour
         _lastTriggerPulled = false;
     }
 
-    // Update is called once per frame
+    private void OnEnable()
+    {
+        _isReloading = false;
+    }
+
     void Update()
     {
         if (_triggerPulled)
@@ -116,20 +116,7 @@ public class Gun : MonoBehaviour
                 if (canFireSemiAutomatic)
                 {
                     _currentClipAmmo--;
-                    _timeOfLastShot = Time.time;                 
-                    //Vector3 cursorDirectionToCamera = new Vector3(0f, 1f, -1f).normalized;
-                    //Vector3 newCursorPosition = _cursorPosition + (cursorDirectionToCamera * _cursorOffsetMultiplier);
-
-                    //_cursorVisualizer = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-                    //_cursorVisualizer.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
-                    //_cursorVisualizer.transform.position = _cursorPosition;
-
-                    //_newCursorVisualizer = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-                    //_newCursorVisualizer.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
-                    //_newCursorVisualizer.transform.position = newCursorPosition;
-                    //_newCursorVisualizer.GetComponent<MeshRenderer>().material = _visualizerMaterial; 
-
-                    //Debug.Log($"Cursor location: {_cursorPosition}, new cursor location: {newCursorPosition}");
+                    _timeOfLastShot = Time.time;                    
                     FireHitscanShot(newCursorPosition);
                 }
                 else if (_currentClipAmmo <= 0 && !_lastTriggerPulled)
@@ -218,16 +205,16 @@ public class Gun : MonoBehaviour
 
         _isReloading = true;
         StartCoroutine(StartReloadTimer());
-        int ammoNeeded = _maxClipAmmo - _currentClipAmmo;
-        int ammoToLoad = Mathf.Min(ammoNeeded, _currentAmmo);
-
-        _currentClipAmmo += ammoToLoad;
-        _currentAmmo -= ammoToLoad;
     }
 
     private IEnumerator StartReloadTimer()
     {
         yield return new WaitForSeconds(_reloadTime);
+        int ammoNeeded = _maxClipAmmo - _currentClipAmmo;
+        int ammoToLoad = Mathf.Min(ammoNeeded, _currentAmmo);
+
+        _currentClipAmmo += ammoToLoad;
+        _currentAmmo -= ammoToLoad;
         _isReloading = false;
     }
 

@@ -651,7 +651,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0f8b8a04260b0446977914b9c9ae608, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Health
-  maxHealth: 100
+  maxHealth: 10
   currentHealth: 0
   damageParticleSystemPrefab: {fileID: 4993949556884765538, guid: 42598accb6289b24bb089b5c7d5b5d0c, type: 3}
   damageParticle: {fileID: 0}

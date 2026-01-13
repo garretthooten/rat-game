@@ -15,6 +15,11 @@ public class Health : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
+        //currentHealth = maxHealth;
+    }
+
+    private void OnEnable()
+    {
         currentHealth = maxHealth;
     }
 
@@ -31,7 +36,8 @@ public class Health : MonoBehaviour
             }
             MyLogger.Info($"{gameObject.name} dying!");
             OnDeath?.Invoke(this);
-            Destroy(gameObject);
+            gameObject.SetActive(false);
+            //Destroy(gameObject);
         }
     }
 
