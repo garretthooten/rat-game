@@ -800,8 +800,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 6309874421707357364, guid: ebd46cb948d4642ba944b0645bfc24f4, type: 3}
     - target: {fileID: 7464577581763786613, guid: 0b61b192f07178747b7ccd32b3cac22c, type: 3}
+      propertyPath: _visualizerMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 76597cf0c8025ad4690d57f578691a0d, type: 2}
+    - target: {fileID: 7464577581763786613, guid: 0b61b192f07178747b7ccd32b3cac22c, type: 3}
       propertyPath: _shotLayerMask.m_Bits
       value: 129
+      objectReference: {fileID: 0}
+    - target: {fileID: 7464577581763786613, guid: 0b61b192f07178747b7ccd32b3cac22c, type: 3}
+      propertyPath: _cursorOffsetMultiplier
+      value: 1.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

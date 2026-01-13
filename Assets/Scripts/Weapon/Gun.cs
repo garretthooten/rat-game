@@ -51,7 +51,11 @@ public class Gun : MonoBehaviour
     protected Camera _camera;
 
     //temp remove this
+    [Header("Temp Debugging")]
     private GameObject _cursorVisualizer;
+    private GameObject _newCursorVisualizer;
+    [SerializeField] private Material _visualizerMaterial;
+    [SerializeField] private float _cursorOffsetMultiplier = 1.0f;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
@@ -103,6 +107,8 @@ public class Gun : MonoBehaviour
     {
         float timeSinceLastShot = Time.time - _timeOfLastShot;
         _canFire = (timeSinceLastShot >= _timeBetweenShots && _currentClipAmmo > 0) && (!_isReloading);
+        Vector3 cursorDirectionToCamera = new Vector3(0f, 1f, -1f).normalized;
+        Vector3 newCursorPosition = _cursorPosition + (cursorDirectionToCamera * _cursorOffsetMultiplier);
         switch (_fireType)
         {
             case Firetype.SemiAutomatic:
@@ -110,12 +116,20 @@ public class Gun : MonoBehaviour
                 if (canFireSemiAutomatic)
                 {
                     _currentClipAmmo--;
-                    _timeOfLastShot = Time.time;
-                    Vector3 newCursorPosition = new Vector3(_cursorPosition.x - (_fireTransform.position.y), _fireTransform.position.y, _cursorPosition.z - (_fireTransform.position.y));
-                    _cursorVisualizer = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-                    _cursorVisualizer.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
-                    _cursorVisualizer.transform.position = newCursorPosition;
-                    Debug.Log($"Cursor location: {_cursorPosition}, new cursor location: {newCursorPosition}");
+                    _timeOfLastShot = Time.time;                 
+                    //Vector3 cursorDirectionToCamera = new Vector3(0f, 1f, -1f).normalized;
+                    //Vector3 newCursorPosition = _cursorPosition + (cursorDirectionToCamera * _cursorOffsetMultiplier);
+
+                    //_cursorVisualizer = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                    //_cursorVisualizer.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+                    //_cursorVisualizer.transform.position = _cursorPosition;
+
+                    //_newCursorVisualizer = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                    //_newCursorVisualizer.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+                    //_newCursorVisualizer.transform.position = newCursorPosition;
+                    //_newCursorVisualizer.GetComponent<MeshRenderer>().material = _visualizerMaterial; 
+
+                    //Debug.Log($"Cursor location: {_cursorPosition}, new cursor location: {newCursorPosition}");
                     FireHitscanShot(newCursorPosition);
                 }
                 else if (_currentClipAmmo <= 0 && !_lastTriggerPulled)
@@ -129,8 +143,7 @@ public class Gun : MonoBehaviour
                 {
                     _currentClipAmmo--;
                     _timeOfLastShot = Time.time;
-                    FireHitscanShot(_cursorPosition);
-                    //MyLogger.Info($"Fire! {_currentClipAmmo} / {_maxClipAmmo}");
+                    FireHitscanShot(newCursorPosition);
                 }
                 else if (_currentClipAmmo <= 0 && !_lastTriggerPulled)
                 {
@@ -144,18 +157,8 @@ public class Gun : MonoBehaviour
     public void FireHitscanShot(Vector3 cursorPosition)
     {
         Vector3 shotDirection = cursorPosition - _fireTransform.position;
-        //GameObject beginMarker = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-        //beginMarker.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
-        //beginMarker.transform.position = _fireTransform.position;
-        //beginMarker.gameObject.name = "Begin Shot";
 
-        //GameObject endMarker = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        //endMarker.transform.position = _fireTransform.position + shotDirection;
-        //endMarker.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
-        //endMarker.gameObject.name = "End Shot";
-        //shotDirection = new Vector3(shotDirection.x, 0f, shotDirection.z);
         RaycastHit hit;
-        //if (Physics.SphereCast(_fireTransform.position, _bulletRadius, shotDirection, out hit))
         if(Physics.CapsuleCast(new Vector3(_fireTransform.position.x, 100f, _fireTransform.position.z), new Vector3(_fireTransform.position.x, -100f, _fireTransform.position.z), _bulletRadius, shotDirection.normalized, out hit, 100f))
         {
             //Debug.Log($"Hit {hit.transform.name}, {hit.transform.tag}");
@@ -163,18 +166,6 @@ public class Gun : MonoBehaviour
             {
                 health.TakeDamage(damage, hit.point, hit.normal);
             }
-                
-            
-            // GameObject bulletVisualizer = Instantiate(_bulletVisualizerPrefab);
-            // LineRenderer lineRenderer = bulletVisualizer.GetComponent<LineRenderer>();
-            //
-            // lineRenderer.positionCount = 2;
-            // lineRenderer.SetPosition(0, _fireTransform.position);
-            // lineRenderer.SetPosition(1, cursorPosition);
-            // lineRenderer.startWidth = _bulletRadius * 2;
-            // lineRenderer.endWidth = _bulletRadius * 2;
-
-            //StartCoroutine(StartBulletVisualizeTimer(bulletVisualizer));
         }
 
         if (_bulletTrailPrefab)
@@ -187,7 +178,7 @@ public class Gun : MonoBehaviour
             }
             else 
             {
-                trailEndpoint = _fireTransform.position + (_fireTransform.forward * 100f);
+                trailEndpoint = _fireTransform.position + (shotDirection.normalized * 100f);
             }
             bulletTrail.GetComponent<BulletTrail>().MoveTrail(_fireTransform.position, trailEndpoint);
         }
@@ -211,6 +202,10 @@ public class Gun : MonoBehaviour
         if(_cursorVisualizer != null)
         {
             Destroy(_cursorVisualizer.gameObject);
+        }
+        if(_newCursorVisualizer != null)
+        {
+            Destroy(_newCursorVisualizer.gameObject);
         }
     }
 
