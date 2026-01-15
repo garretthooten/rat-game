@@ -19,7 +19,7 @@ public class BasicRatSpawner : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void OnEnable()
     {
-        _timeBetweenSpawns = 1 / _ratsPerSecond;
+        _timeBetweenSpawns = 1f / _ratsPerSecond;
         MyLogger.Info($"Creating rat spawner with {_ratsPerSecond} RPS, one spawn every {_timeBetweenSpawns} seconds");
         _spawnCoroutine = StartCoroutine(SpawnRoutine());
     }
@@ -43,11 +43,14 @@ public class BasicRatSpawner : MonoBehaviour
             if (currentRatCount < maxRatCount)
             {
                 GameObject rat = _ratPool.GetObject();
-                rat.transform.position = _ratSpawnPoint.position;
-                rat.transform.rotation = _ratSpawnPoint.rotation;
-                //GameObject rat = Instantiate(_ratPrefab, _ratSpawnPoint.position, _ratSpawnPoint.rotation);
-                rat.GetComponent<Health>().OnDeath += HandleRatDeath;
-                currentRatCount++;
+                if (rat != null)
+                {
+                    rat.transform.position = _ratSpawnPoint.position;
+                    rat.transform.rotation = _ratSpawnPoint.rotation;
+                    //GameObject rat = Instantiate(_ratPrefab, _ratSpawnPoint.position, _ratSpawnPoint.rotation);
+                    rat.GetComponent<Health>().OnDeath += HandleRatDeath;
+                    currentRatCount++;
+                }
             }
             yield return new WaitForSeconds(_timeBetweenSpawns);
         }
