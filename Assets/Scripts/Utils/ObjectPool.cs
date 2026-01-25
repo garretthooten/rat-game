@@ -6,6 +6,7 @@ public class ObjectPool : MonoBehaviour
 {
     public GameObject objectToPool;
     public int poolCount = 10;
+    public bool ready = false;
 
     private List<GameObject> _pooledObjects;
 
@@ -18,19 +19,25 @@ public class ObjectPool : MonoBehaviour
             instance.SetActive(false);
             _pooledObjects.Add(instance);
         }
+        ready = true;
     }
 
     public GameObject GetObject()
     {
-        for(int i = 0; i < _pooledObjects.Count; i++)
+        if (ready)
         {
-            if (_pooledObjects[i] != null && !_pooledObjects[i].activeInHierarchy)
+            for (int i = 0; i < _pooledObjects.Count; i++)
             {
-                _pooledObjects[i].SetActive(true);
-                return _pooledObjects[i];
+                if (_pooledObjects[i] != null && !_pooledObjects[i].activeInHierarchy)
+                {
+                    _pooledObjects[i].SetActive(true);
+                    return _pooledObjects[i];
+                }
             }
+            Debug.LogError("No suitable gameobject found in pool");
+            return null;
         }
-        Debug.LogError("No suitable gameobject found in pool");
+        Debug.LogError("ObjectPool not ready before GetObject invoked");
         return null;
     }
 }

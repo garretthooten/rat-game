@@ -42,14 +42,17 @@ public class BasicRatSpawner : MonoBehaviour
         {
             if (currentRatCount < maxRatCount)
             {
-                GameObject rat = _ratPool.GetObject();
-                if (rat != null)
+                if (_ratPool != null)
                 {
-                    rat.transform.position = _ratSpawnPoint.position;
-                    rat.transform.rotation = _ratSpawnPoint.rotation;
-                    //GameObject rat = Instantiate(_ratPrefab, _ratSpawnPoint.position, _ratSpawnPoint.rotation);
-                    rat.GetComponent<Health>().OnDeath += HandleRatDeath;
-                    currentRatCount++;
+                    GameObject rat = _ratPool.GetObject();
+                    if (rat != null)
+                    {
+                        rat.transform.position = _ratSpawnPoint.position;
+                        rat.transform.rotation = _ratSpawnPoint.rotation;
+                        //GameObject rat = Instantiate(_ratPrefab, _ratSpawnPoint.position, _ratSpawnPoint.rotation);
+                        rat.GetComponent<Health>().OnDeath += HandleRatDeath;
+                        currentRatCount++;
+                    }
                 }
             }
             yield return new WaitForSeconds(_timeBetweenSpawns);
