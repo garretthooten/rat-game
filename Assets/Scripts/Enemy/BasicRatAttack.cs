@@ -46,7 +46,7 @@ public class BasicRatAttack : MonoBehaviour
     public void Update()
     {
         float distanceToPlayer = Vector3.Distance(_playerTransform.position, transform.position);
-        if (distanceToPlayer <= attackDistance && !isAttacking)
+        if (distanceToPlayer <= attackDistance && !isAttacking && !PlayerHealth.IsDead)
         {
             float timeSinceLastAttack = Time.time - _timeOfLastAttack;
             MyLogger.Info($"Within attack distance, time since attack: {timeSinceLastAttack}s");

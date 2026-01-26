@@ -1,9 +1,12 @@
+using System;
 using TMPro;
 using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
 {
     public static PlayerHealth instance;
+    public static event Action<PlayerHealth> OnPlayerDeath;
+    public static bool IsDead = false;
 
     public float maxHealth = 100f;
     public float currentHealth;
@@ -32,9 +35,7 @@ public class PlayerHealth : MonoBehaviour
         if (currentHealth <= 0)
         {
             currentHealth = 0;
-            // death stuff
-            MyLogger.Info("Player dying!");
-            Destroy(this.gameObject);
+            Die();
         }
 
         if (debugText)
@@ -47,5 +48,13 @@ public class PlayerHealth : MonoBehaviour
     public void Damage(float damage)
     {
         currentHealth -= damage;
+    }
+
+    private void Die()
+    {
+        Debug.Log("Player Dying!");
+        IsDead = true;
+        OnPlayerDeath?.Invoke(this);
+        gameObject.SetActive(false);
     }
 }

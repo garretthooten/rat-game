@@ -103,6 +103,17 @@ public class Gun : MonoBehaviour
         _lastTriggerPulled = _triggerPulled;
     }
 
+    public bool TryAddAmmo(Firetype type, int amount)
+    {
+        if(type == _fireType)
+        {
+            _currentAmmo += amount;
+            return true;
+        }
+
+        return false;
+    }
+
     public void Fire()
     {
         float timeSinceLastShot = Time.time - _timeOfLastShot;

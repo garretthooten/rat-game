@@ -53,7 +53,7 @@ public class Health : MonoBehaviour
                 damageParticle = Instantiate(damageParticleSystemPrefab).GetComponent<ParticleSystem>();
                 damageParticle.transform.SetParent(transform, true);
             }
-            Debug.Log("Got normal and stuff");
+            //Debug.Log("Got normal and stuff");
             damageParticle.transform.position = impactPoint;
             damageParticle.transform.forward = impactNormal;
             damageParticle.Play();

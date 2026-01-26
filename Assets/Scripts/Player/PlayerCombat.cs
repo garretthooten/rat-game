@@ -40,6 +40,17 @@ public class PlayerCombat : MonoBehaviour
         _cursorMarker.transform.position = point;
     }
 
+    public void AddWeaponAmmo(Gun.Firetype type, int amount)
+    {
+        foreach(var gun in weaponInventory)
+        {
+            if(gun.GetComponent<Gun>().TryAddAmmo(type, amount))
+            {
+                return;
+            }
+        }
+    }
+
     void DeleteCursorMarker()
     {
         if (_cursorMarker)

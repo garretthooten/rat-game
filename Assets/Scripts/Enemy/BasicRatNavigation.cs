@@ -26,14 +26,35 @@ public class BasicRatNavigation : MonoBehaviour
         MyLogger.Info($"Current rat count: {instanceCount}");
     }
 
+    private void OnEnable()
+    {
+        PlayerHealth.OnPlayerDeath += ClearNavTarget;
+    }
+
+    private void OnDisable()
+    {
+        PlayerHealth.OnPlayerDeath -= ClearNavTarget;
+    }
+
+    private void ClearNavTarget(PlayerHealth playerHealth)
+    {
+        canMove = false;
+        target = null;
+    }
+
     // Update is called once per frame
     void Update()
     {
         if (_ratCombat != null)
             canMove = !_ratCombat.isAttacking;
-        if (target && canMove && (Time.time - _timeOfLastDestinationCalc) > destinationCalcInterval)
+        Vector3 targetLocation;
+        if (target && target.gameObject.activeInHierarchy)
+            targetLocation = target.position;
+        else
+            targetLocation = new Vector3(Random.Range(-100f, 100f), 0f, Random.Range(-100f, 100f));
+        if (canMove && (Time.time - _timeOfLastDestinationCalc) > destinationCalcInterval)
         {
-            agent.SetDestination(target.position);
+            agent.SetDestination(targetLocation);
             _timeOfLastDestinationCalc = Time.time;
         }
     }
