@@ -1,5 +1,18 @@
+using System;
 using System.Collections;
 using UnityEngine;
+
+public class DamageInstance
+{
+    public Health EnemyHealth;
+    public float DamageTaken;
+
+    public DamageInstance(Health enemyHealth, float damageTaken)
+    {
+        EnemyHealth = enemyHealth;
+        DamageTaken = damageTaken;
+    }
+}
 
 [RequireComponent(typeof(AudioSource))]
 public class Gun : MonoBehaviour
@@ -12,6 +25,7 @@ public class Gun : MonoBehaviour
 
     public Transform attachTransform;
     public float damage = 20f;
+    public event Action<DamageInstance> OnDamageDealt;
 
     [SerializeField] protected Firetype _fireType;
     [SerializeField] protected int _maxAmmo;
@@ -157,14 +171,27 @@ public class Gun : MonoBehaviour
         Vector3 shotDirection = cursorPosition - _fireTransform.position;
 
         RaycastHit hit;
-        if(Physics.CapsuleCast(new Vector3(_fireTransform.position.x, 100f, _fireTransform.position.z), new Vector3(_fireTransform.position.x, -100f, _fireTransform.position.z), _bulletRadius, shotDirection.normalized, out hit, 100f))
+        if (Physics.CapsuleCast(new Vector3(_fireTransform.position.x, 100f, _fireTransform.position.z), new Vector3(_fireTransform.position.x, -100f, _fireTransform.position.z), _bulletRadius, shotDirection.normalized, out hit, 100f))
         {
+            Debug.DrawLine(_fireTransform.position, hit.point, Color.red);
             //Debug.Log($"Hit {hit.transform.name}, {hit.transform.tag}");
             if (hit.transform.TryGetComponent(out Health health))
             {
+                Debug.Log("dealing damage");
                 health.TakeDamage(damage, hit.point, hit.normal);
+                DamageIndicator indicator = DamageIndicatorPool.Instance.Get();
+                if (indicator != null)
+                {
+                    Debug.Log("Got display");
+                    indicator.Display(Color.yellow, damage, hit.transform.position);
+                }
+                OnDamageDealt?.Invoke(new DamageInstance(health, damage));
             }
         }
+        else {
+            Debug.DrawLine(_fireTransform.position, (_fireTransform.position + shotDirection.normalized * 999f), Color.yellow);
+        }
+
 
         if (_bulletTrailPrefab)
         {
@@ -174,7 +201,7 @@ public class Gun : MonoBehaviour
             {
                 trailEndpoint = hit.point;
             }
-            else 
+            else
             {
                 trailEndpoint = _fireTransform.position + (shotDirection.normalized * 100f);
             }
