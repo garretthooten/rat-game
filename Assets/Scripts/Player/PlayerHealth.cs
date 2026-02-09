@@ -2,11 +2,25 @@ using System;
 using TMPro;
 using UnityEngine;
 
+public class HealthChange
+{
+    public float changeInHealth;
+    public float updatedHealth;
+
+    public HealthChange(float change, float total)
+    {
+        changeInHealth = change;
+        updatedHealth = total;
+    }
+}
+
 public class PlayerHealth : MonoBehaviour
 {
-    public static PlayerHealth instance;
+    public static PlayerHealth instance { get; private set; }
+    public static event Action<HealthChange> OnPlayerHealthChange;
     public static event Action<PlayerHealth> OnPlayerDeath;
     public static bool IsDead = false;
+    public static bool CanTakeDamage = true;
 
     public float maxHealth = 100f;
     public float currentHealth;
@@ -47,7 +61,17 @@ public class PlayerHealth : MonoBehaviour
 
     public void Damage(float damage)
     {
-        currentHealth -= damage;
+        if(CanTakeDamage)
+        {
+            currentHealth -= damage;
+            HealthChange change = new HealthChange(damage, currentHealth);
+            OnPlayerHealthChange?.Invoke(change);
+        }
+    }
+
+    public void SetCanTakeDamage(bool value)
+    {
+        CanTakeDamage = value;
     }
 
     private void Die()
