@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 public class PlayerCombat : MonoBehaviour
 {
 
-    private  InputHandler _input;
+    private InputHandler _input;
     private bool _lastAttack;
     private GameObject _cursorMarker;
     [SerializeField] private LayerMask _layerMask;

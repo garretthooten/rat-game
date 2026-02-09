@@ -8,7 +8,7 @@ public class DamageIndicatorPool : MonoBehaviour
     public static DamageIndicatorPool Instance { get; private set; }
     
     public GameObject DamageIndicatorPrefab;
-    public int instanceCount = 20;
+    public int instanceCount = 40;
 
     public List<DamageIndicator> _indicators;
 

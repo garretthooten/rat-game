@@ -7,6 +7,8 @@ using System;
 
 public class InputHandler : MonoBehaviour
 {
+    public static InputHandler Instance { get; private set; }
+
     private PlayerInput _playerInput;
     private InputAction _moveAction;
     private InputAction _attackAction;
@@ -14,6 +16,7 @@ public class InputHandler : MonoBehaviour
     private InputAction _weaponSelectAction;
     private InputAction _jumpAction;
     private InputAction _dashAction;
+    private InputAction _interactAction;
 
     public Vector2 move;
 
@@ -21,6 +24,7 @@ public class InputHandler : MonoBehaviour
     public bool reload;
     public bool jump;
     public bool dash;
+    public bool interact;
 
     public int selectedWeapon = 1;
 
@@ -28,10 +32,18 @@ public class InputHandler : MonoBehaviour
 
     // subscribe actions
     public event Action OnDashInput;
+    public event Action OnInteractInput;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+
         _playerInput = GetComponent<PlayerInput>();
         _moveAction = _playerInput.actions["Move"];
         _attackAction = _playerInput.actions["Attack"];
@@ -39,6 +51,7 @@ public class InputHandler : MonoBehaviour
         _weaponSelectAction = _playerInput.actions["Weapon Select"];
         _jumpAction = _playerInput.actions["Jump"];
         _dashAction = _playerInput.actions["Dash"];
+        _interactAction = _playerInput.actions["Interact"];
 
         _moveAction.performed += OnMove;
         _moveAction.canceled += OnMove;
@@ -52,6 +65,8 @@ public class InputHandler : MonoBehaviour
         _jumpAction.canceled += OnJump;
         _dashAction.performed += OnDash;
         _dashAction.canceled += OnDash;
+        _interactAction.performed += OnInteract;
+        _interactAction.canceled += OnInteract;
     }
 
     void OnDisable()
@@ -67,6 +82,8 @@ public class InputHandler : MonoBehaviour
         _jumpAction.canceled -= OnJump;
         _dashAction.performed -= OnDash;
         _dashAction.canceled -= OnDash;
+        _interactAction.performed -= OnInteract;
+        _interactAction.canceled -= OnInteract;
     }
 
     // Update is called once per frame
@@ -74,7 +91,7 @@ public class InputHandler : MonoBehaviour
     {
         if (debugText)
         {
-            debugText.text = $"Move: {move}\nAttack: {attack}\nReload: {reload}\nJump: {jump}\nDash: {dash}";;
+            debugText.text = $"Move: {move}\nAttack: {attack}\nReload: {reload}\nJump: {jump}\nDash: {dash}\nInteract: {interact}";;
         }
     }
 
@@ -130,5 +147,16 @@ public class InputHandler : MonoBehaviour
         }
         else if (context.phase == InputActionPhase.Canceled)
             dash = false;
+    }
+
+    void OnInteract(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Performed)
+        {
+            interact = true;
+            OnInteractInput?.Invoke();
+        }
+        else if (context.phase == InputActionPhase.Canceled)
+            interact = false;
     }
 }

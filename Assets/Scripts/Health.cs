@@ -5,6 +5,7 @@ public class Health : MonoBehaviour
 {
     public float maxHealth = 100f;
     public float currentHealth;
+    public int moneyValue = 1; // probably should not be in "health" script, but this needs to be reworked anyways...
 
     public event Action<Health> OnDeath;
 
@@ -16,6 +17,11 @@ public class Health : MonoBehaviour
     void Awake()
     {
         //currentHealth = maxHealth;
+    }
+
+    private void Start()
+    {
+        
     }
 
     private void OnEnable()
@@ -35,6 +41,7 @@ public class Health : MonoBehaviour
                 navigation.BeginDeath();
             }
             MyLogger.Info($"{gameObject.name} dying!");
+            PlayerMoney.Instance?.AddMoney(moneyValue);
             OnDeath?.Invoke(this);
             gameObject.SetActive(false);
             //Destroy(gameObject);
