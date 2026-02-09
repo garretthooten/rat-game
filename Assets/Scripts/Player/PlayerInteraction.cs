@@ -3,12 +3,20 @@ public class PlayerInteraction : MonoBehaviour
 {
     private Interactable _currentInteractable;
 
+    void Start()
+    {
+        if(InputHandler.Instance != null)
+        {
+            InputHandler.Instance.OnInteractInput += HandleInteract;
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         //Debug.Log($"Object {other.gameObject.name} entered interaction box");
         if(other.TryGetComponent(out Interactable interactable))
         {
-            Debug.Log("Interactable enters range");
+            Debug.Log($"Interactable enters range: {interactable.gameObject.name}");
             _currentInteractable = interactable;
         }
     }
@@ -18,24 +26,27 @@ public class PlayerInteraction : MonoBehaviour
         if (other.TryGetComponent(out Interactable interactable) &&
             interactable == _currentInteractable)
         {
-            Debug.Log("Interactable exits range");
+            Debug.Log($"Interactable exits range: {interactable.gameObject.name}");
             _currentInteractable = null;
         }
     }
 
     void OnEnable()
     {
-        InputHandler.Instance?.OnInteractInput += HandleInteract;
+        if(InputHandler.Instance != null)
+        {
+            InputHandler.Instance.OnInteractInput += HandleInteract;
+        }
     }
 
     void OnDisable()
     {
-        InputHandler.Instance?.OnInteractInput -= HandleInteract;
+        if(InputHandler.Instance != null)
+            InputHandler.Instance.OnInteractInput -= HandleInteract;
     }
 
     private void HandleInteract()
     {
-        Debug.Log($"PlayerInteractable in HandleInteract, _currentInteractable? {_currentInteractable == null}");
         _currentInteractable?.Interact();
     }
 }
