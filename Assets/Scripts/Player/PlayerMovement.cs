@@ -6,9 +6,12 @@ public class PlayerMovement : MonoBehaviour
 {
     public bool CanMove = true;
     
+    [Header("Physics")]
     public float moveSpeed = 10.0f;
     public float gravity = -9.8f;
     public float gravityMultiplier = 1.0f;
+    [SerializeField] private int _playerLayer = 6;
+    [SerializeField] private int _ratLayer = 7;
 
     [Header("Dash Configuration")]
     public int maxDashes = 2;
@@ -103,11 +106,15 @@ public class PlayerMovement : MonoBehaviour
         float dashSpeed = dashDistance / dashDuration;
         Debug.Log($"Dash beginning with dashSpeed {dashSpeed}");
         OnDashPerformed?.Invoke();
+        Physics.IgnoreLayerCollision(_playerLayer, _ratLayer, true);
+        PlayerHealth.instance?.SetCanTakeDamage(false);
         //yield return null;
         isDashing = true;
         yield return new WaitForSeconds(dashDuration);
         isDashing = false;
         OnDashCanceled?.Invoke();
+        Physics.IgnoreLayerCollision(_playerLayer, _ratLayer, false);
+        PlayerHealth.instance?.SetCanTakeDamage(true);
         StartCoroutine(StartDashCooldown());
     }
 
