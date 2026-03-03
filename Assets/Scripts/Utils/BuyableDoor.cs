@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(Interactable))]
 public class BuyableDoor : MonoBehaviour
@@ -6,6 +7,8 @@ public class BuyableDoor : MonoBehaviour
     public int price = 20;
 
     private Interactable _interactable;
+
+    [SerializeField] private Text _text;
 
     private void Awake()
     {
@@ -15,6 +18,8 @@ public class BuyableDoor : MonoBehaviour
     private void OnEnable()
     {
         _interactable.OnInteract += Purchase;
+        if (_text != null)
+            _text.text = $"${price}";
     }
 
     private void OnDisable()

@@ -51,6 +51,7 @@ public class Gun : MonoBehaviour
     [SerializeField] protected AudioSource _audioSource;
     [SerializeField] protected AudioClip _fireSound;
     [SerializeField] protected AudioClip _emptyClipSound;
+    [SerializeField] protected AudioClip _reloadSound;
     
     protected float _timeBetweenShots;
     protected float _timeOfLastShot;
@@ -247,6 +248,7 @@ public class Gun : MonoBehaviour
 
     private IEnumerator StartReloadTimer()
     {
+        _audioSource.PlayOneShot(_reloadSound, _sfxVolume);
         yield return new WaitForSeconds(_reloadTime);
         int ammoNeeded = _maxClipAmmo - _currentClipAmmo;
         int ammoToLoad = Mathf.Min(ammoNeeded, _currentAmmo);
