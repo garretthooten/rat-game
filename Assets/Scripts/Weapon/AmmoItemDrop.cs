@@ -30,7 +30,6 @@ public class AmmoItemDrop : MonoBehaviour
     {
         if (other.CompareTag(_playerTag))
         {
-            Debug.Log("Player walked over ammo pickup");
             if (_audioSource != null && _pickupSoundEffect != null)
             {
                 StartCoroutine(PickupObjectWithAudio(other));
@@ -52,7 +51,6 @@ public class AmmoItemDrop : MonoBehaviour
         _audioSource.clip = _pickupSoundEffect;
         _audioSource.Play();
         yield return new WaitUntil(() => _audioSource.time >= _pickupSoundEffect.length);
-        Debug.Log("Pickup sound effect done playing");
         gameObject.SetActive(false);
     }
 

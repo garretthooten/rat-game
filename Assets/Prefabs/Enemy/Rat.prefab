@@ -477,6 +477,7 @@ GameObject:
   - component: {fileID: 18016942087200543}
   - component: {fileID: 9064325103277542082}
   - component: {fileID: 1572135191064186402}
+  - component: {fileID: 1154347375176349268}
   m_Layer: 7
   m_Name: Rat
   m_TagString: CanTakeDamage
@@ -653,6 +654,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Health
   maxHealth: 10
   currentHealth: 0
+  moneyValue: 1
   damageParticleSystemPrefab: {fileID: 4993949556884765538, guid: 42598accb6289b24bb089b5c7d5b5d0c, type: 3}
   damageParticle: {fileID: 0}
 --- !u!82 &1572135191064186402
@@ -752,3 +754,21 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1154347375176349268
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7435218415329369828}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96e9d67ebb7424844af33d43a0d99d47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyItemDrops
+  objectsToDrop:
+  - {fileID: 4012085922853239141, guid: c4014d9272cc97344b531331e8253885, type: 3}
+  - {fileID: 3166442082274985381, guid: 62622c6fdc8e4e7419f372538de560b0, type: 3}
+  percentChanceToDrop:
+  - 10
+  - 10
