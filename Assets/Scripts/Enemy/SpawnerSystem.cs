@@ -133,9 +133,13 @@ public class SpawnerSystem : MonoBehaviour
     {
         Debug.Log($"Starting to spawn routine with {_waveRatCount} rats and duration {_waveDuration}");
 
+        while(currentRoom == null)
+        {
+            yield return null;
+        }
         while(true)
         {
-            float spawnRate = _waveDuration / _waveRatCount;
+            float spawnRate = _waveRatCount / _waveDuration;
             ratsSpawnedThisWave = 0;
             Debug.Log($"Starting wave {wavesComplete + 1} with rate {spawnRate}");
             _timeOfWaveStart = Time.time;

@@ -769,6 +769,8 @@ MonoBehaviour:
   objectsToDrop:
   - {fileID: 4012085922853239141, guid: c4014d9272cc97344b531331e8253885, type: 3}
   - {fileID: 3166442082274985381, guid: 62622c6fdc8e4e7419f372538de560b0, type: 3}
+  - {fileID: 5792567551280523534, guid: 0bb4c9f59a3f7794da1645deeffcd04e, type: 3}
   percentChanceToDrop:
+  - 10
   - 10
   - 10

@@ -69,6 +69,15 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
+    public void Heal(float amount)
+    {
+        if (currentHealth + amount > maxHealth)
+            amount = amount - ((currentHealth + amount) - maxHealth);
+        currentHealth += amount;
+        HealthChange change = new HealthChange(amount, currentHealth);
+        OnPlayerHealthChange?.Invoke(change);
+    }
+
     public void SetCanTakeDamage(bool value)
     {
         CanTakeDamage = value;
