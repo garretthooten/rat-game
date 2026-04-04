@@ -36,6 +36,18 @@ public class BasicRatAttack : MonoBehaviour
             _basicRatNavigation = GetComponent<BasicRatNavigation>();
         }
     }
+
+    public void OnEnable()
+    {
+        _attackBox.DisableAttack();
+        isAttacking = false;
+    }
+
+    public void OnDisable()
+    {
+        _attackBox.DisableAttack();
+        isAttacking = false;
+    }
     
     public void Start()
     {

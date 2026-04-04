@@ -29,6 +29,7 @@ public class BasicRatNavigation : MonoBehaviour
     private void OnEnable()
     {
         PlayerHealth.OnPlayerDeath += ClearNavTarget;
+        target = PlayerHealth.GetPlayerHealthInstance().transform;
     }
 
     private void OnDisable()
