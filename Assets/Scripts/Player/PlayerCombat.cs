@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -6,8 +8,29 @@ public class PlayerCombat : MonoBehaviour
 {
 
     private InputHandler _input;
+    private PlayerMovement _movement;
     private bool _lastAttack;
     private GameObject _cursorMarker;
+
+    // melee attack stuff
+    [Header("Melee Configuration")]
+    [SerializeField] private AudioClip _smallMeleeSound;
+    [SerializeField] private AudioClip _bigMeleeSound;
+    [SerializeField] private float _meleeChargeMoveSpeedFactor = 0.7f;
+    [SerializeField] private float _meleeInputDurationWindow = 0.5f;
+    [SerializeField] private float _smallMeleeAttackDuration = 0.25f;
+    [SerializeField] private float _smallMeleeAttackDamage = 25f; // controlled by what melee weapon you have later
+    [SerializeField] private GameObject _smallMeleeAttackHurtbox;
+    [SerializeField] private float _bigMeleeAttackDuration = 0.5f;
+    [SerializeField] private float _bigMeleeAttackDamage = 50f;
+    [SerializeField] private GameObject _bigMeleeAttackHurtbox;
+    
+    private bool _meleeInputPressed = false;
+    private bool _isMeleeAttacking = false;
+    private float _timeOfMeleeInputStart;
+    private float _timeOfMeleeInputStop;
+    [Header("General Configuration")]
+    [SerializeField] private AudioSource _audioSource;
     [SerializeField] private LayerMask _layerMask;
     [SerializeField] private int _ignoreLayer = 2;
     [SerializeField] private TMP_Text _debugText;
@@ -21,12 +44,28 @@ public class PlayerCombat : MonoBehaviour
     void Awake()
     {
         _input = GetComponent<InputHandler>();
+        _movement = GetComponent<PlayerMovement>();
+        _audioSource = GetComponent<AudioSource>();
         if (!_weaponAttachTransform)
         {
             MyLogger.Error("Failed to get weapon attach transform");
         }
         
         ChangeWeapons();
+    }
+
+    void OnEnable()
+    {
+        _input.OnMeleeInput += StartMeleeAttackInput;
+        _input.OnMeleeInputCanceled += StopMeleeAttackInput;
+        _smallMeleeAttackHurtbox.SetActive(false);
+        _bigMeleeAttackHurtbox.SetActive(false);
+    }
+
+    void OnDisable()
+    {
+        _input.OnMeleeInput -= StartMeleeAttackInput;
+        _input.OnMeleeInputCanceled -= StopMeleeAttackInput;
     }
 
     void MakeCursorMarker(Vector3 point)
@@ -67,7 +106,7 @@ public class PlayerCombat : MonoBehaviour
             ChangeWeapons();
         }
         
-        if (_input.attack)
+        if (_input.attack && !_input.melee && !_isMeleeAttacking)
         {
             isAttacking = true;
             Vector2 mousePosition = Mouse.current.position.ReadValue();
@@ -150,5 +189,49 @@ public class PlayerCombat : MonoBehaviour
         }
 
         return result;
+    }
+
+    private void StartMeleeAttackInput()
+    {
+        StartCoroutine(MeleeAttackProcess());
+    }
+
+    private void StopMeleeAttackInput()
+    {
+        _timeOfMeleeInputStop = Time.time;
+        _meleeInputPressed = false;
+    }
+
+    IEnumerator MeleeAttackProcess()
+    {
+        _timeOfMeleeInputStart = Time.time;
+        _movement.ChangeSpeed(_meleeChargeMoveSpeedFactor);
+        while(_input.melee)
+        {
+            yield return null;
+        }
+        _timeOfMeleeInputStop = Time.time;
+        float duration = _timeOfMeleeInputStop - _timeOfMeleeInputStart;
+        bool isBigMeleeAttack = (duration > _meleeInputDurationWindow);
+        Debug.Log($"Melee attack lifted, duration: {duration}s, isBigMeleeAttack: {isBigMeleeAttack}");
+        _isMeleeAttacking = true;
+        if(!isBigMeleeAttack)
+        {
+            _movement.RestoreSpeed();
+            _smallMeleeAttackHurtbox.SetActive(true);
+            _audioSource.PlayOneShot(_smallMeleeSound);
+            yield return new WaitForSeconds(_smallMeleeAttackDuration);
+            _smallMeleeAttackHurtbox.SetActive(false);
+        }
+        else
+        {
+            _bigMeleeAttackHurtbox.SetActive(true);
+            _audioSource.PlayOneShot(_bigMeleeSound);
+            yield return new WaitForSeconds(_bigMeleeAttackDuration);
+            _movement.RestoreSpeed();
+            _bigMeleeAttackHurtbox.SetActive(false);
+        }
+        _isMeleeAttacking = false;
+        
     }
 }

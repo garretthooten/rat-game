@@ -29,6 +29,7 @@ public class PlayerMovement : MonoBehaviour
     private CharacterController _controller;
     private InputHandler _inputHandler;
     private PlayerCombat _playerCombat;
+    private float _currentMoveSpeed;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
@@ -38,6 +39,7 @@ public class PlayerMovement : MonoBehaviour
         _playerCombat = GetComponent<PlayerCombat>();
 
         _currentDashes = maxDashes;
+        _currentMoveSpeed = moveSpeed;
     }
 
     void OnEnable()
@@ -70,7 +72,7 @@ public class PlayerMovement : MonoBehaviour
                 Vector3 adjustedDirection = new Vector3(_inputHandler.move.x, 0f, _inputHandler.move.y);
                 if (!_playerCombat.isAttacking)
                     gameObject.transform.forward = adjustedDirection;
-                move += adjustedDirection * moveSpeed;
+                move += adjustedDirection * _currentMoveSpeed;
             }
         }
 
@@ -80,6 +82,15 @@ public class PlayerMovement : MonoBehaviour
         // temp debugging
         //Vector3 move = new Vector3(_inputHandler.move.x, 0f, _inputHandler.move.y);
         //_controller.Move(move * moveSpeed * Time.deltaTime);
+    }
+
+    public void ChangeSpeed(float percent)
+    {
+        _currentMoveSpeed = moveSpeed * percent;
+    }
+    public void RestoreSpeed()
+    {
+        _currentMoveSpeed = moveSpeed;
     }
 
     void Dash()

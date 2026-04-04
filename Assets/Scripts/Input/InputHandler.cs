@@ -12,6 +12,7 @@ public class InputHandler : MonoBehaviour
     private PlayerInput _playerInput;
     private InputAction _moveAction;
     private InputAction _attackAction;
+    private InputAction _meleeAction;
     private InputAction _reloadAction;
     private InputAction _weaponSelectAction;
     private InputAction _jumpAction;
@@ -21,6 +22,7 @@ public class InputHandler : MonoBehaviour
     public Vector2 move;
 
     public bool attack;
+    public bool melee;
     public bool reload;
     public bool jump;
     public bool dash;
@@ -31,6 +33,8 @@ public class InputHandler : MonoBehaviour
     public TMP_Text debugText;
 
     // subscribe actions
+    public event Action OnMeleeInput;
+    public event Action OnMeleeInputCanceled;
     public event Action OnDashInput;
     public event Action OnInteractInput;
 
@@ -47,6 +51,7 @@ public class InputHandler : MonoBehaviour
         _playerInput = GetComponent<PlayerInput>();
         _moveAction = _playerInput.actions["Move"];
         _attackAction = _playerInput.actions["Attack"];
+        _meleeAction = _playerInput.actions["Melee"];
         _reloadAction = _playerInput.actions["Reload"];
         _weaponSelectAction = _playerInput.actions["Weapon Select"];
         _jumpAction = _playerInput.actions["Jump"];
@@ -57,6 +62,8 @@ public class InputHandler : MonoBehaviour
         _moveAction.canceled += OnMove;
         _attackAction.performed += OnAttack;
         _attackAction.canceled += OnAttack;
+        _meleeAction.performed += OnMelee;
+        _meleeAction.canceled += OnMelee;
         _reloadAction.performed += OnReload;
         _reloadAction.canceled += OnReload;
         // makethis a consumabel input?
@@ -75,6 +82,8 @@ public class InputHandler : MonoBehaviour
         _moveAction.canceled -= OnMove;
         _attackAction.performed -= OnAttack;
         _attackAction.canceled -= OnAttack;
+        _meleeAction.performed -= OnMelee;
+        _meleeAction.canceled -= OnMelee;
         _reloadAction.performed -= OnReload;
         _reloadAction.canceled -= OnReload;
         _weaponSelectAction.performed -= OnWeaponSelect;
@@ -91,7 +100,7 @@ public class InputHandler : MonoBehaviour
     {
         if (debugText)
         {
-            debugText.text = $"Move: {move}\nAttack: {attack}\nReload: {reload}\nJump: {jump}\nDash: {dash}\nInteract: {interact}";;
+            debugText.text = $"Move: {move}\nAttack: {attack}\nMelee: {melee}\nReload: {reload}\nJump: {jump}\nDash: {dash}\nInteract: {interact}";;
         }
     }
 
@@ -106,6 +115,20 @@ public class InputHandler : MonoBehaviour
             attack = true;
         else if (context.phase == InputActionPhase.Canceled)
             attack = false;
+    }
+
+    void OnMelee(InputAction.CallbackContext context)
+    {
+        if(context.phase == InputActionPhase.Performed)
+        {
+            melee = true;
+            OnMeleeInput?.Invoke();
+        }
+        else if (context.phase == InputActionPhase.Canceled)
+        {
+            melee = false;
+            OnMeleeInputCanceled?.Invoke();
+        }
     }
 
     void OnReload(InputAction.CallbackContext context)
