@@ -636,6 +636,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BasicRatAttack
   _playerHealth: {fileID: 0}
+  _audioClip: {fileID: 8300000, guid: 2399f94ab35280d4db7074658f810d94, type: 3}
   _attackBox: {fileID: 5999669146625697436}
   attackDistance: 2
   _attackDuration: 2

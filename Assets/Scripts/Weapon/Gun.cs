@@ -147,7 +147,7 @@ public class Gun : MonoBehaviour
                 }
                 else if (_currentClipAmmo <= 0 && !_lastTriggerPulled)
                 {
-                    _audioSource.PlayOneShot(_emptyClipSound, _sfxVolume);
+                    _audioSource.PlayOneShot(_emptyClipSound, SettingsManager.instance.sfxVolume);
                 }
 
                 break;
@@ -160,7 +160,7 @@ public class Gun : MonoBehaviour
                 }
                 else if (_currentClipAmmo <= 0 && !_lastTriggerPulled)
                 {
-                    _audioSource.PlayOneShot(_emptyClipSound, _sfxVolume);
+                    _audioSource.PlayOneShot(_emptyClipSound, SettingsManager.instance.sfxVolume);
                 }
 
                 break;
@@ -211,7 +211,7 @@ public class Gun : MonoBehaviour
 
         if (_muzzleFlash)
             _muzzleFlash.Play();
-        _audioSource.PlayOneShot(_fireSound, _sfxVolume);
+        _audioSource.PlayOneShot(_fireSound, SettingsManager.instance.sfxVolume);
     }
 
     public void PullTrigger(Vector3 cursorPosition)

@@ -10,6 +10,7 @@ public class BasicRatAttack : MonoBehaviour
     private BasicRatNavigation _basicRatNavigation;
     private Transform _playerTransform;
     private AudioSource _audioSource;
+    [SerializeField] private AudioClip _audioClip;
 
     [SerializeField] private SingleHitBox _attackBox;
     //[SerializeField] private BoxCollider _attackBox;
@@ -73,7 +74,7 @@ public class BasicRatAttack : MonoBehaviour
     {
         isAttacking = true;
         _timeOfLastAttack = Time.time;
-        _audioSource.Play();
+        _audioSource.PlayOneShot(_audioClip, SettingsManager.instance.sfxVolume);
         _attackBox.EnableAttack();
         yield return new WaitForSeconds(_attackDuration);
         _attackBox.DisableAttack();

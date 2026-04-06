@@ -48,7 +48,7 @@ public class HealthPickupItem : MonoBehaviour
         //_meshRenderer.enabled = false;
         _collider.enabled = false;
         //_audioSource.clip = _pickupSoundEffect;
-        AudioSource.PlayClipAtPoint(_pickupSoundEffect, transform.position);
+        AudioSource.PlayClipAtPoint(_pickupSoundEffect, transform.position, SettingsManager.instance.sfxVolume);
         //yield return new WaitUntil(() => _audioSource.time >= _pickupSoundEffect.length);
         gameObject.SetActive(false);
         yield return null; // not optimal but just temporary

@@ -49,7 +49,7 @@ public class AmmoItemDrop : MonoBehaviour
         _meshRenderer.enabled = false;
         _collider.enabled = false;
         _audioSource.clip = _pickupSoundEffect;
-        _audioSource.Play();
+        _audioSource.PlayOneShot(_pickupSoundEffect, SettingsManager.instance.sfxVolume);
         yield return new WaitUntil(() => _audioSource.time >= _pickupSoundEffect.length);
         gameObject.SetActive(false);
     }

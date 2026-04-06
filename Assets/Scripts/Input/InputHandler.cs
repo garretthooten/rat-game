@@ -18,6 +18,7 @@ public class InputHandler : MonoBehaviour
     private InputAction _jumpAction;
     private InputAction _dashAction;
     private InputAction _interactAction;
+    private InputAction _pauseAction;
 
     public Vector2 move;
 
@@ -27,6 +28,7 @@ public class InputHandler : MonoBehaviour
     public bool jump;
     public bool dash;
     public bool interact;
+    public bool pause;
 
     public int selectedWeapon = 1;
 
@@ -37,6 +39,7 @@ public class InputHandler : MonoBehaviour
     public event Action OnMeleeInputCanceled;
     public event Action OnDashInput;
     public event Action OnInteractInput;
+    public event Action OnPauseInput;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
@@ -57,6 +60,7 @@ public class InputHandler : MonoBehaviour
         _jumpAction = _playerInput.actions["Jump"];
         _dashAction = _playerInput.actions["Dash"];
         _interactAction = _playerInput.actions["Interact"];
+        _pauseAction = _playerInput.actions["Pause"];
 
         _moveAction.performed += OnMove;
         _moveAction.canceled += OnMove;
@@ -74,6 +78,8 @@ public class InputHandler : MonoBehaviour
         _dashAction.canceled += OnDash;
         _interactAction.performed += OnInteract;
         _interactAction.canceled += OnInteract;
+        _pauseAction.performed += OnPause;
+        _pauseAction.canceled += OnPause;
     }
 
     void OnDisable()
@@ -93,6 +99,8 @@ public class InputHandler : MonoBehaviour
         _dashAction.canceled -= OnDash;
         _interactAction.performed -= OnInteract;
         _interactAction.canceled -= OnInteract;
+        _pauseAction.performed -= OnPause;
+        _pauseAction.canceled -= OnPause;
     }
 
     // Update is called once per frame
@@ -100,7 +108,7 @@ public class InputHandler : MonoBehaviour
     {
         if (debugText)
         {
-            debugText.text = $"Move: {move}\nAttack: {attack}\nMelee: {melee}\nReload: {reload}\nJump: {jump}\nDash: {dash}\nInteract: {interact}";;
+            debugText.text = $"Pause: {pause}\nMove: {move}\nAttack: {attack}\nMelee: {melee}\nReload: {reload}\nJump: {jump}\nDash: {dash}\nInteract: {interact}";;
         }
     }
 
@@ -181,5 +189,16 @@ public class InputHandler : MonoBehaviour
         }
         else if (context.phase == InputActionPhase.Canceled)
             interact = false;
+    }
+    
+    void OnPause(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Performed)
+        {
+            pause = true;
+            OnPauseInput?.Invoke();
+        }
+        else if (context.phase == InputActionPhase.Canceled)
+            pause = false;
     }
 }
