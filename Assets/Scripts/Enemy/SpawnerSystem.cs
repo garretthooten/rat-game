@@ -52,10 +52,17 @@ public class SpawnerSystem : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        PlayerHealth.OnPlayerDeath += OnPlayerDeath;
+        
         if(_startWaveOnInit)
         {
             StartWaveRoutine();
         }
+    }
+
+    void OnDisable()
+    {
+        PlayerHealth.OnPlayerDeath -= OnPlayerDeath;
     }
 
     public void StartWaveRoutine()
@@ -74,6 +81,12 @@ public class SpawnerSystem : MonoBehaviour
         {
             Debug.LogError("Failed condition to start wave routine");
         }
+    }
+
+    void OnPlayerDeath(PlayerHealth health)
+    {
+        // stop system
+        StopWaveRoutine();
     }
 
     public void StopWaveRoutine()
@@ -149,6 +162,8 @@ public class SpawnerSystem : MonoBehaviour
                 SpawnRatAtRandom();
                 yield return new WaitForSeconds(1/spawnRate);
             }
+
+            wavesComplete++;
             _timeOfWaveEnd = Time.time;
             waveState = WaveState.InBetween;
             Debug.Log($"Wave duration ended, waiting for {_timeBetweenWaves} before next wave");

@@ -8,7 +8,7 @@ public class BasicRatAttack : MonoBehaviour
     
     [SerializeField] private PlayerHealth _playerHealth;
     private BasicRatNavigation _basicRatNavigation;
-    private Transform _playerTransform;
+    [SerializeField] private Transform _playerTransform;
     private AudioSource _audioSource;
     [SerializeField] private AudioClip _audioClip;
 
