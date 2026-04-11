@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,12 +7,14 @@ public class SettingsDialog : MonoBehaviour
     [SerializeField] private Slider _sfxVolumeSlider;
     [SerializeField] private Slider _musicVolumeSlider;
     [SerializeField] private Toggle _fullscreenToggle;
+    [SerializeField] private TMP_Dropdown _musicOptionsDropdown;
 
     void Awake()
     {
         _sfxVolumeSlider.onValueChanged.AddListener(SetSFXVolume);
         _musicVolumeSlider.onValueChanged.AddListener(SetMusicVolume);
         _fullscreenToggle.onValueChanged.AddListener(SetFullscreen);
+        _musicOptionsDropdown.onValueChanged.AddListener(SetMusicOption);
     }
 
     void Start()
@@ -44,5 +47,11 @@ public class SettingsDialog : MonoBehaviour
         Debug.Log($"Setting fullscreen to {value}");
         //int boolValue = value ? 1 : 0;
         SettingsManager.instance?.SetFullscreen(value);
+    }
+
+    void SetMusicOption(int index)
+    {
+        Debug.Log($"Setting music option to {index}");
+        BackgroundMusicManager.instance?.ChangeMusicOption(index);
     }
 }
