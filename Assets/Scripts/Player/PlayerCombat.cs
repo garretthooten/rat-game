@@ -31,7 +31,7 @@ public class PlayerCombat : MonoBehaviour
     private float _timeOfMeleeInputStop;
     [Header("General Configuration")]
     [SerializeField] private AudioSource _audioSource;
-    [SerializeField] private LayerMask _layerMask;
+    [SerializeField] private int _layerMask;
     [SerializeField] private int _ignoreLayer = 2;
     [SerializeField] private TMP_Text _debugText;
     [SerializeField] private Transform _weaponAttachTransform;
@@ -46,6 +46,7 @@ public class PlayerCombat : MonoBehaviour
         _input = GetComponent<InputHandler>();
         _movement = GetComponent<PlayerMovement>();
         _audioSource = GetComponent<AudioSource>();
+        _layerMask = LayerMask.GetMask("Default", "Environment");
         if (!_weaponAttachTransform)
         {
             MyLogger.Error("Failed to get weapon attach transform");
@@ -112,7 +113,7 @@ public class PlayerCombat : MonoBehaviour
             Vector2 mousePosition = Mouse.current.position.ReadValue();
             RaycastHit hit;
             var originMouse = Camera.main.ScreenPointToRay(mousePosition);
-            if (Physics.Raycast(originMouse, out hit))
+            if (Physics.Raycast(originMouse, out hit, 999f, _layerMask))
             {
                 // visualize hit point
                 //MakeCursorMarker(hit.point);

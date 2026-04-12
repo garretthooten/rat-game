@@ -134,7 +134,7 @@ public class SpawnerSystem : MonoBehaviour
         if(currentRoom != null)
         {
             int chosenTransformIndex = Random.Range(0, currentRoom.spawnTransforms.Length);
-            Debug.Log($"Chosen index: {chosenTransformIndex} (length {currentRoom.spawnTransforms.Length})");
+            //Debug.Log($"Chosen index: {chosenTransformIndex} (length {currentRoom.spawnTransforms.Length})");
             GameObject rat = ratPool.GetObject();
             rat.transform.position = currentRoom.spawnTransforms[chosenTransformIndex].position;
 

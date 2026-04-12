@@ -21,7 +21,7 @@ public class Room : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log($"Player entered room {name}");
+        Debug.Log($"Player entered room {name} / {other.gameObject.name}");
         if(SpawnerSystem.Instance != null )
         {
             SpawnerSystem.Instance.SetCurrentRoom(this);

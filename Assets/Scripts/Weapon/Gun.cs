@@ -59,6 +59,7 @@ public class Gun : MonoBehaviour
     protected bool _isReloading;
     protected bool _triggerPulled;
     protected bool _lastTriggerPulled;
+    protected int _layerMask;
 
     protected Vector3 _cursorPosition;
 
@@ -97,6 +98,7 @@ public class Gun : MonoBehaviour
             MyLogger.Error("Failed to find bullet visualizer prefab");
         }
 
+        _layerMask = LayerMask.GetMask("Default", "Rat", "Environment");
         _timeBetweenShots = 1 / _fireRate;
         MyLogger.Info($"_timeBetweenShots: {_timeBetweenShots}s");
         _timeOfLastShot = Time.time;
@@ -172,7 +174,7 @@ public class Gun : MonoBehaviour
         Vector3 shotDirection = cursorPosition - _fireTransform.position;
 
         RaycastHit hit;
-        if (Physics.CapsuleCast(new Vector3(_fireTransform.position.x, 100f, _fireTransform.position.z), new Vector3(_fireTransform.position.x, -100f, _fireTransform.position.z), _bulletRadius, shotDirection.normalized, out hit, 100f))
+        if (Physics.CapsuleCast(new Vector3(_fireTransform.position.x, 100f, _fireTransform.position.z), new Vector3(_fireTransform.position.x, -100f, _fireTransform.position.z), _bulletRadius, shotDirection.normalized, out hit, 100f, _layerMask))
         {
             Debug.DrawLine(_fireTransform.position, hit.point, Color.red);
             //Debug.Log($"Hit {hit.transform.name}, {hit.transform.tag}");
