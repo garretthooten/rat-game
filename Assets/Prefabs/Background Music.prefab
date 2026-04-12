@@ -144,4 +144,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BackgroundMusicManager
   _musicClips:
   - {fileID: 8300000, guid: 7d5b6d5625dee4d46b80e7cb523dac1c, type: 3}
+  - {fileID: 8300000, guid: 383225fcbdee34e32930dccfdc6da57d, type: 3}
   - {fileID: 8300000, guid: 089a26ed4777747a6a9f3412674a1c99, type: 3}

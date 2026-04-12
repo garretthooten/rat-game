@@ -1054,7 +1054,10 @@ MonoBehaviour:
     - m_Text: Option 1 - Ben Sanford
       m_Image: {fileID: 0}
       m_Color: {r: 1, g: 1, b: 1, a: 1}
-    - m_Text: Option 2 - Stolen undertale fangame track
+    - m_Text: Option 2 - Ben Sanford
+      m_Image: {fileID: 0}
+      m_Color: {r: 1, g: 1, b: 1, a: 1}
+    - m_Text: Option 3 - Stolen undertale fangame track
       m_Image: {fileID: 0}
       m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_OnValueChanged:
@@ -2276,6 +2279,7 @@ MonoBehaviour:
   _sfxVolumeSlider: {fileID: 8290137033666123417}
   _musicVolumeSlider: {fileID: 2315254965325412086}
   _fullscreenToggle: {fileID: 4589156475085911887}
+  _musicOptionsDropdown: {fileID: 0}
 --- !u!1 &7057972340546985902
 GameObject:
   m_ObjectHideFlags: 0

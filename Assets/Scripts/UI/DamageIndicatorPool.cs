@@ -34,6 +34,7 @@ public class DamageIndicatorPool : MonoBehaviour
             if (!indicator)
                 Debug.LogError("No Indicator component!");
 
+            instance.SetActive(false);
             _indicators.Add(indicator);
             
             //_indicators.Append(instance.GetComponent<DamageIndicator>());
@@ -46,6 +47,7 @@ public class DamageIndicatorPool : MonoBehaviour
         {
             if(!indicator.isEnabled)
             {
+                indicator.gameObject.SetActive(true);
                 return indicator;
             }
         }
