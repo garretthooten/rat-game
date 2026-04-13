@@ -2503,7 +2503,8 @@ MonoBehaviour:
   wavesComplete: 0
   startingWaveMaxRats: 50
   ratsSpawnedThisWave: 0
-  maxRatWaveIncrementFactor: 1.5
+  maximumRatIncrease: 25
+  maxRatWaveIncrementFactor: 1
   waveState: 0
   _waveDuration: 30
   _waveRatCount: 0
@@ -5456,8 +5457,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.5, y: 2, z: 1.5}
-  m_Center: {x: 0, y: 0, z: 1.05}
+  m_Size: {x: 1.5, y: 2, z: 3.2464411}
+  m_Center: {x: 0, y: 0, z: 0.17677939}
 --- !u!114 &659253928
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11319,6 +11320,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SettingsManager
   sfxVolume: 0
   musicVolume: 0
+  musicOption: 0
   fullscreen: 0
 --- !u!1 &1521536342
 GameObject:
@@ -15343,6 +15345,10 @@ PrefabInstance:
       propertyPath: _fireSound
       value: 
       objectReference: {fileID: 8300000, guid: 0d647d5d76d774b63b2654af315f4281, type: 3}
+    - target: {fileID: 8474014853433261005, guid: a8ac820e88af9b641b0a8b78086bf5ac, type: 3}
+      propertyPath: _currentAmmo
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8474014853433261005, guid: a8ac820e88af9b641b0a8b78086bf5ac, type: 3}
       propertyPath: _muzzleFlash
       value: 

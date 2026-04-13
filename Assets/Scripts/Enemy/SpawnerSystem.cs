@@ -18,6 +18,7 @@ public class SpawnerSystem : MonoBehaviour
     public int wavesComplete = 0;
     public int startingWaveMaxRats = 100;
     public int ratsSpawnedThisWave = 0;
+    public int maximumRatIncrease = 25;
     public float maxRatWaveIncrementFactor = 1.25f;
     public WaveState waveState = WaveState.Waiting;
 
@@ -152,7 +153,6 @@ public class SpawnerSystem : MonoBehaviour
         }
         while(true)
         {
-            
             float spawnRate = _waveRatCount / _waveDuration;
             ratsSpawnedThisWave = 0;
             Debug.Log($"Starting wave {wavesComplete + 1} with rate {spawnRate}");
@@ -169,7 +169,8 @@ public class SpawnerSystem : MonoBehaviour
             waveState = WaveState.InBetween;
             Debug.Log($"Wave duration ended, waiting for {_timeBetweenWaves} before next wave");
             yield return new WaitForSeconds(_timeBetweenWaves);
-            _waveRatCount = (int)Math.Ceiling(_waveRatCount * maxRatWaveIncrementFactor);
+            _waveRatCount += maximumRatIncrease;
+            maximumRatIncrease = (int)Math.Ceiling(maximumRatIncrease * maxRatWaveIncrementFactor);
         }
         
     }

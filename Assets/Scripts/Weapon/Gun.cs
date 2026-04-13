@@ -152,36 +152,42 @@ public class Gun : MonoBehaviour
             _newCursorVisualizer.name = "New Cursor Visualizer";
         }
 
-        //test
-        switch (_fireType)
+        if (_currentClipAmmo <= 0 && !_isReloading && _currentAmmo > 0)
         {
-            case Firetype.SemiAutomatic:
-                bool canFireSemiAutomatic = _canFire && (!_lastTriggerPulled);
-                if (canFireSemiAutomatic)
-                {
-                    _currentClipAmmo--;
-                    _timeOfLastShot = Time.time;                    
-                    FireHitscanShot(newCursorPosition);
-                }
-                else if (_currentClipAmmo <= 0 && !_lastTriggerPulled)
-                {
-                    _audioSource.PlayOneShot(_emptyClipSound, SettingsManager.instance.sfxVolume);
-                }
+            Reload();
+        }
+        else
+        {
+            switch (_fireType)
+            {
+                case Firetype.SemiAutomatic:
+                    bool canFireSemiAutomatic = _canFire && (!_lastTriggerPulled);
+                    if (canFireSemiAutomatic)
+                    {
+                        _currentClipAmmo--;
+                        _timeOfLastShot = Time.time;
+                        FireHitscanShot(newCursorPosition);
+                    }
+                    else if (_currentClipAmmo <= 0 && !_lastTriggerPulled && !_isReloading)
+                    {
+                        _audioSource.PlayOneShot(_emptyClipSound, SettingsManager.instance.sfxVolume);
+                    }
 
-                break;
-            case Firetype.FullAutomatic:
-                if (_canFire)
-                {
-                    _currentClipAmmo--;
-                    _timeOfLastShot = Time.time;
-                    FireHitscanShot(newCursorPosition);
-                }
-                else if (_currentClipAmmo <= 0 && !_lastTriggerPulled)
-                {
-                    _audioSource.PlayOneShot(_emptyClipSound, SettingsManager.instance.sfxVolume);
-                }
+                    break;
+                case Firetype.FullAutomatic:
+                    if (_canFire)
+                    {
+                        _currentClipAmmo--;
+                        _timeOfLastShot = Time.time;
+                        FireHitscanShot(newCursorPosition);
+                    }
+                    else if (_currentClipAmmo <= 0 && !_lastTriggerPulled && !_isReloading)
+                    {
+                        _audioSource.PlayOneShot(_emptyClipSound, SettingsManager.instance.sfxVolume);
+                    }
 
-                break;
+                    break;
+            }
         }
     }
 
@@ -267,6 +273,10 @@ public class Gun : MonoBehaviour
 
     public void Reload()
     {
+        if (_currentAmmo <= 0)
+        {
+            return;
+        }
         if (_isReloading)
         {
             return;
@@ -279,7 +289,7 @@ public class Gun : MonoBehaviour
     private IEnumerator StartReloadTimer()
     {
         _audioSource.PlayOneShot(_reloadSound, _sfxVolume);
-        yield return new WaitForSeconds(_reloadTime);
+        yield return new WaitForSeconds(_reloadSound.length);
         int ammoNeeded = _maxClipAmmo - _currentClipAmmo;
         int ammoToLoad = Mathf.Min(ammoNeeded, _currentAmmo);
 
