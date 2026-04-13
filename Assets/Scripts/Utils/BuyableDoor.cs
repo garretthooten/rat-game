@@ -34,7 +34,8 @@ public class BuyableDoor : MonoBehaviour
         {
             if (PlayerMoney.Instance.currentMoney >= price)
             {
-                PlayerMoney.Instance.currentMoney -= price;
+                //PlayerMoney.Instance.currentMoney -= price;
+                PlayerMoney.Instance.RemoveMoney(price);
                 gameObject.SetActive(false);
             }
             else 

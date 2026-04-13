@@ -46,7 +46,7 @@ public class PlayerCombat : MonoBehaviour
         _input = GetComponent<InputHandler>();
         _movement = GetComponent<PlayerMovement>();
         _audioSource = GetComponent<AudioSource>();
-        _layerMask = LayerMask.GetMask("Default", "Environment");
+        _layerMask = LayerMask.GetMask("Floor");
         if (!_weaponAttachTransform)
         {
             MyLogger.Error("Failed to get weapon attach transform");

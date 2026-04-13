@@ -139,6 +139,20 @@ public class Gun : MonoBehaviour
         _canFire = (timeSinceLastShot >= _timeBetweenShots && _currentClipAmmo > 0) && (!_isReloading);
         Vector3 cursorDirectionToCamera = new Vector3(0f, 1f, -1f).normalized;
         Vector3 newCursorPosition = _cursorPosition + (cursorDirectionToCamera * _cursorOffsetMultiplier);
+        //Vector3 newCursorPosition = _camera.ScreenToWorldPoint(Input.mousePosition + cursorDirectionToCamera);
+        if (false)
+        {
+            _cursorVisualizer = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            _cursorVisualizer.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+            _cursorVisualizer.transform.position = _cursorPosition;
+            _cursorVisualizer.name = "Cursor Visualizer";
+            _newCursorVisualizer = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            _newCursorVisualizer.transform.localScale = new Vector3(.1f, .1f, .1f);
+            _newCursorVisualizer.transform.position = newCursorPosition;
+            _newCursorVisualizer.name = "New Cursor Visualizer";
+        }
+
+        //test
         switch (_fireType)
         {
             case Firetype.SemiAutomatic:

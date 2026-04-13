@@ -37,7 +37,7 @@ public class AmmoItemDrop : MonoBehaviour
             else
             {
                 other.GetComponent<PlayerCombat>()?.AddWeaponAmmo(firetype, amount);
-                gameObject.SetActive(false);
+                //gameObject.SetActive(false);
                 //Destroy(gameObject);
             }
         }
@@ -50,8 +50,11 @@ public class AmmoItemDrop : MonoBehaviour
         _collider.enabled = false;
         _audioSource.clip = _pickupSoundEffect;
         _audioSource.PlayOneShot(_pickupSoundEffect, SettingsManager.instance.sfxVolume);
-        yield return new WaitUntil(() => _audioSource.time >= _pickupSoundEffect.length);
-        gameObject.SetActive(false);
+        //yield return new WaitUntil(() => _audioSource.time >= _pickupSoundEffect.length);
+        yield return new WaitForSeconds(_pickupSoundEffect.length);
+        //gameObject.SetActive(false);
+        //yield return null;
+        Destroy(gameObject);
     }
 
 }

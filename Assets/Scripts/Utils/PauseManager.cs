@@ -24,7 +24,7 @@ public class PauseManager : MonoBehaviour
 
     public void InternalTogglePause()
     {
-        TogglePause(false);
+        TogglePause();
     }
 
     public void TogglePause(bool displayPanel = true)
