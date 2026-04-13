@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using Unity.Entities.UniversalDelegates;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 
 public class SpawnerSystem : MonoBehaviour
@@ -15,10 +17,8 @@ public class SpawnerSystem : MonoBehaviour
     public Room currentRoom;
     public int wavesComplete = 0;
     public int startingWaveMaxRats = 100;
-    public int startingWaveSpawnRate = 10; // rate in seconds
     public int ratsSpawnedThisWave = 0;
-    public int ratsKilledThisWave = 0;
-    public bool waveInProgress = false;
+    public float maxRatWaveIncrementFactor = 1.25f;
     public WaveState waveState = WaveState.Waiting;
 
     [SerializeField] private float _waveDuration = 60f;
@@ -152,6 +152,7 @@ public class SpawnerSystem : MonoBehaviour
         }
         while(true)
         {
+            
             float spawnRate = _waveRatCount / _waveDuration;
             ratsSpawnedThisWave = 0;
             Debug.Log($"Starting wave {wavesComplete + 1} with rate {spawnRate}");
@@ -168,6 +169,7 @@ public class SpawnerSystem : MonoBehaviour
             waveState = WaveState.InBetween;
             Debug.Log($"Wave duration ended, waiting for {_timeBetweenWaves} before next wave");
             yield return new WaitForSeconds(_timeBetweenWaves);
+            _waveRatCount = (int)Math.Ceiling(_waveRatCount * maxRatWaveIncrementFactor);
         }
         
     }

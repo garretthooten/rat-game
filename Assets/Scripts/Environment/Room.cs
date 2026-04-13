@@ -4,6 +4,8 @@ public class Room : MonoBehaviour
 {
     public Transform[] spawnTransforms;
     public string name = "DefaultRoom";
+    public bool finalRoomEvent = false;
+    [SerializeField] private GameObject _bossRat;
 
     //[SerializeField] private string _playerTag; I dont think I need this I can just manage collision layers
     
@@ -25,6 +27,11 @@ public class Room : MonoBehaviour
         if(SpawnerSystem.Instance != null )
         {
             SpawnerSystem.Instance.SetCurrentRoom(this);
+        }
+
+        if (finalRoomEvent && _bossRat != null)
+        {
+            _bossRat.SetActive(true);
         }
     }
 
