@@ -568,7 +568,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01855ef5017c344c4ba5eede05bce3b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MainMenu
-  _levelString: spawnersystem-rooms
+  _levelString: prototype-arena
   _creditsDialog: {fileID: 990316617}
   _settingsDialog: {fileID: 545871243}
 --- !u!1 &286273185
