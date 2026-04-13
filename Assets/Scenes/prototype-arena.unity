@@ -15347,7 +15347,7 @@ PrefabInstance:
       objectReference: {fileID: 8300000, guid: 0d647d5d76d774b63b2654af315f4281, type: 3}
     - target: {fileID: 8474014853433261005, guid: a8ac820e88af9b641b0a8b78086bf5ac, type: 3}
       propertyPath: _currentAmmo
-      value: 0
+      value: 120
       objectReference: {fileID: 0}
     - target: {fileID: 8474014853433261005, guid: a8ac820e88af9b641b0a8b78086bf5ac, type: 3}
       propertyPath: _muzzleFlash
