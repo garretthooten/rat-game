@@ -4089,7 +4089,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &501495420
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5138,6 +5138,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 18016942087200543, guid: df37f93876cd98142a005f3e8744fa45, type: 3}
+      propertyPath: attackDistance
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 18016942087200543, guid: df37f93876cd98142a005f3e8744fa45, type: 3}
+      propertyPath: _attackCooldown
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 18016942087200543, guid: df37f93876cd98142a005f3e8744fa45, type: 3}
+      propertyPath: _attackDuration
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2028866874750398440, guid: df37f93876cd98142a005f3e8744fa45, type: 3}
       propertyPath: m_Speed
       value: 11
@@ -5145,6 +5157,14 @@ PrefabInstance:
     - target: {fileID: 2028866874750398440, guid: df37f93876cd98142a005f3e8744fa45, type: 3}
       propertyPath: m_Radius
       value: 0.53
+      objectReference: {fileID: 0}
+    - target: {fileID: 4914758620205326587, guid: df37f93876cd98142a005f3e8744fa45, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5999669146625697436, guid: df37f93876cd98142a005f3e8744fa45, type: 3}
+      propertyPath: damage
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 6474512222913237093, guid: df37f93876cd98142a005f3e8744fa45, type: 3}
       propertyPath: m_LocalScale.x
@@ -5220,7 +5240,7 @@ PrefabInstance:
       objectReference: {fileID: 404726433}
     - target: {fileID: 9064325103277542082, guid: df37f93876cd98142a005f3e8744fa45, type: 3}
       propertyPath: maxHealth
-      value: 1
+      value: 2000
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -14353,7 +14373,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 555287fc37ae3f34c825fabd6df76836, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMoney
-  currentMoney: 10000
+  currentMoney: 0
   _debugText: {fileID: 1398975725}
 --- !u!82 &2086596094
 AudioSource:

@@ -282,8 +282,10 @@ public class Gun : MonoBehaviour
     
     public string MakeDebugString()
     {
+        //string result =
+        //    $"fireType: {_fireType}\nammo: {_currentClipAmmo}/{_maxClipAmmo} Stash Ammo:{_currentAmmo}\ntriggerPulled: {_triggerPulled}\nlastTriggerPulled: {_lastTriggerPulled}\nisReloading: {_isReloading}";
         string result =
-            $"fireType: {_fireType}\nammo: {_currentClipAmmo}/{_maxClipAmmo}/{_currentAmmo}\ntriggerPulled: {_triggerPulled}\nlastTriggerPulled: {_lastTriggerPulled}\nisReloading: {_isReloading}";
+            $"Current Weapon: {_fireType}\nAmmo: {_currentClipAmmo}/{_maxClipAmmo}\nAmmo Reserves: {_currentAmmo}";
         return result;
     }
     

@@ -235,7 +235,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e3c18166989b4743b5112922a19b72e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SingleHitBox
-  damage: 100000
+  damage: 2
   _playerHealth: {fileID: 0}
   _attackPerformed: 0
 --- !u!1 &6210043020216364245
