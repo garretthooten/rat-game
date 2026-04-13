@@ -1949,6 +1949,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8300000, guid: 9bf0cad7480ad7144aeec3084e72a229, type: 3}
     - target: {fileID: 7464577581763786613, guid: 0b61b192f07178747b7ccd32b3cac22c, type: 3}
+      propertyPath: _bulletRadius
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7464577581763786613, guid: 0b61b192f07178747b7ccd32b3cac22c, type: 3}
       propertyPath: _emptyClipSound
       value: 
       objectReference: {fileID: 8300000, guid: 7efb55f9df9374319ae84342521d6c6d, type: 3}
@@ -15347,6 +15351,10 @@ PrefabInstance:
       propertyPath: _reloadSound
       value: 
       objectReference: {fileID: 8300000, guid: c7766952d371e1547a41dd777f557ed6, type: 3}
+    - target: {fileID: 8474014853433261005, guid: a8ac820e88af9b641b0a8b78086bf5ac, type: 3}
+      propertyPath: _bulletRadius
+      value: 0.2
+      objectReference: {fileID: 0}
     - target: {fileID: 8474014853433261005, guid: a8ac820e88af9b641b0a8b78086bf5ac, type: 3}
       propertyPath: _emptyClipSound
       value: 

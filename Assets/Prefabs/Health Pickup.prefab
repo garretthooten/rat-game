@@ -271,7 +271,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ecac89d1dcabdd40bd2391e347fd20b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HealthPickupItem
-  amount: 10
+  amount: 20
   _playerTag: Player
   _pickupSoundEffect: {fileID: 0}
 --- !u!135 &8495969102812630096
