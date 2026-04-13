@@ -72,6 +72,8 @@ public class Gun : MonoBehaviour
     private GameObject _newCursorVisualizer;
     [SerializeField] private Material _visualizerMaterial;
     [SerializeField] private float _cursorOffsetMultiplier = 1.0f;
+    [SerializeField] private bool _debugVisualizeCapsuleCast = false;
+    [SerializeField] private float _debugDrawDuration = 1.0f;
 
     void Awake()
     {
@@ -176,8 +178,9 @@ public class Gun : MonoBehaviour
         RaycastHit hit;
         if (Physics.CapsuleCast(new Vector3(_fireTransform.position.x, 100f, _fireTransform.position.z), new Vector3(_fireTransform.position.x, -100f, _fireTransform.position.z), _bulletRadius, shotDirection.normalized, out hit, 100f, _layerMask))
         {
+            if (_debugVisualizeCapsuleCast)
+                DrawCapsuleCastDebug(shotDirection, hit, 100f);
             Debug.DrawLine(_fireTransform.position, hit.point, Color.red);
-            //Debug.Log($"Hit {hit.transform.name}, {hit.transform.tag}");
             if (hit.transform.TryGetComponent(out Health health))
             {
                 Debug.Log("dealing damage");
@@ -191,7 +194,10 @@ public class Gun : MonoBehaviour
                 OnDamageDealt?.Invoke(new DamageInstance(health, damage));
             }
         }
-        else {
+        else
+        {
+            if (_debugVisualizeCapsuleCast)
+                DrawCapsuleCastDebug(shotDirection, hit, 100f);
             Debug.DrawLine(_fireTransform.position, (_fireTransform.position + shotDirection.normalized * 999f), Color.yellow);
         }
 
@@ -202,7 +208,15 @@ public class Gun : MonoBehaviour
             Vector3 trailEndpoint;
             if (hit.transform)
             {
-                trailEndpoint = hit.point;
+                RaycastHit visualHit;
+                if (Physics.Raycast(_fireTransform.position, shotDirection.normalized, out visualHit, 200f, _layerMask))
+                {
+                    trailEndpoint = visualHit.point;
+                }
+                else
+                {
+                    trailEndpoint = _fireTransform.position + (shotDirection.normalized * 100f);
+                }
             }
             else
             {
@@ -265,11 +279,66 @@ public class Gun : MonoBehaviour
         yield return new WaitForSeconds(_bulletVisualizeTime);
         Destroy(bulletVisualizer);
     }
-
+    
     public string MakeDebugString()
     {
         string result =
             $"fireType: {_fireType}\nammo: {_currentClipAmmo}/{_maxClipAmmo}/{_currentAmmo}\ntriggerPulled: {_triggerPulled}\nlastTriggerPulled: {_lastTriggerPulled}\nisReloading: {_isReloading}";
         return result;
+    }
+    
+     // Claude code generated debug visualization to confirm hit registration is working correctly
+    private void DrawCapsuleCastDebug(Vector3 shotDirection, RaycastHit hit, float maxDistance)
+    {
+        Vector3 dir = shotDirection.normalized;
+        float dist = hit.collider != null ? hit.distance : maxDistance;
+        Color sweepColor = hit.collider != null ? Color.green : Color.yellow;
+
+        // The capsule's two end-sphere centers at start and end of sweep
+        Vector3 topStart    = new Vector3(_fireTransform.position.x, 100f,  _fireTransform.position.z);
+        Vector3 bottomStart = new Vector3(_fireTransform.position.x, -100f, _fireTransform.position.z);
+        Vector3 topEnd      = topStart    + dir * dist;
+        Vector3 bottomEnd   = bottomStart + dir * dist;
+
+        // Vertical axis lines at start and end of sweep
+        Debug.DrawLine(topStart, bottomStart, Color.cyan, _debugDrawDuration);
+        Debug.DrawLine(topEnd,   bottomEnd,   sweepColor, _debugDrawDuration);
+
+        // Perpendicular offset to show capsule radius on the ground plane
+        Vector3 perp = Vector3.Cross(dir, Vector3.up).normalized * _bulletRadius;
+
+        // Four longitudinal edges showing the swept volume sides
+        Debug.DrawLine(topStart    + perp,  topEnd    + perp,  sweepColor, _debugDrawDuration);
+        Debug.DrawLine(topStart    - perp,  topEnd    - perp,  sweepColor, _debugDrawDuration);
+        Debug.DrawLine(bottomStart + perp,  bottomEnd + perp,  sweepColor, _debugDrawDuration);
+        Debug.DrawLine(bottomStart - perp,  bottomEnd - perp,  sweepColor, _debugDrawDuration);
+
+        // Ground-plane circle at the fire position showing the bullet radius
+        DrawDebugCircle(_fireTransform.position, _bulletRadius, Color.cyan, 16, _debugDrawDuration);
+
+        if (hit.collider != null)
+        {
+            // Ground-plane circle at the hit position
+            DrawDebugCircle(_fireTransform.position + dir * dist, _bulletRadius, Color.green, 16, _debugDrawDuration);
+
+            // Cross marker at the raw CapsuleCast hit.point (the bug source — capsule surface contact)
+            float m = 0.25f;
+            Debug.DrawLine(hit.point - Vector3.right   * m, hit.point + Vector3.right   * m, Color.red,     _debugDrawDuration);
+            Debug.DrawLine(hit.point - Vector3.up      * m, hit.point + Vector3.up      * m, Color.red,     _debugDrawDuration);
+            Debug.DrawLine(hit.point - Vector3.forward * m, hit.point + Vector3.forward * m, Color.red,     _debugDrawDuration);
+        }
+    }
+
+    private void DrawDebugCircle(Vector3 center, float radius, Color color, int segments, float duration)
+    {
+        float angleStep = 360f / segments;
+        for (int i = 0; i < segments; i++)
+        {
+            float a0 = Mathf.Deg2Rad * (i       * angleStep);
+            float a1 = Mathf.Deg2Rad * ((i + 1) * angleStep);
+            Vector3 p0 = center + new Vector3(Mathf.Cos(a0) * radius, 0f, Mathf.Sin(a0) * radius);
+            Vector3 p1 = center + new Vector3(Mathf.Cos(a1) * radius, 0f, Mathf.Sin(a1) * radius);
+            Debug.DrawLine(p0, p1, color, duration);
+        }
     }
 }
