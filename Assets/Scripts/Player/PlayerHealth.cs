@@ -41,6 +41,10 @@ public class PlayerHealth : MonoBehaviour
         }
 
         currentHealth = maxHealth;
+        IsDead = false;
+        CanTakeDamage = true;
+        BasicRatNavigation.instanceCount = 0;
+        Time.timeScale = 1f;
     }
 
     // Update is called once per frame

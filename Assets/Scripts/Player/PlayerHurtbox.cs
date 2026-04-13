@@ -20,6 +20,11 @@ public class PlayerHurtbox : MonoBehaviour
     {
         //Debug.Log($"Player Hurtbox Collided with {other.gameObject.name}");
         // assuming its on the rat layer and has a health component:
-        other.GetComponent<Health>().TakeDamage(damage);
+        if (other != null)
+        {
+            Health health = other.GetComponent<Health>();
+            if (health != null)
+                health.TakeDamage(damage);
+        }
     }
 }
