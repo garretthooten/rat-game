@@ -5,18 +5,41 @@ using UnityEngine.SceneManagement;
 public class GameOverPanel : MonoBehaviour
 {
     [SerializeField] private TMP_Text _text;
+    [SerializeField] private bool _isVictoryScreen;
+    [SerializeField] private EndGoal _endGoal;
     
     void OnEnable()
     {
-        PlayerHealth.OnPlayerDeath += UpdateWaveInfo;
+        
+        if (_isVictoryScreen)
+        {
+            _endGoal.OnVictory += UpdateWaveInfoVictory;
+        }
+        else
+            PlayerHealth.OnPlayerDeath += UpdateWaveInfo;
     }
 
     void OnDisable()
     {
-        PlayerHealth.OnPlayerDeath -= UpdateWaveInfo;
+        
+        if (_isVictoryScreen)
+        {
+            _endGoal.OnVictory -= UpdateWaveInfoVictory;
+        }
+        else
+        {
+            PlayerHealth.OnPlayerDeath -= UpdateWaveInfo;
+        }
     }
 
     void UpdateWaveInfo(PlayerHealth health)
+    {
+        // enable panel
+        transform.GetChild(0).gameObject.SetActive(true);
+        _text.text = $"Waves Complete: {SpawnerSystem.Instance.wavesComplete}";
+    }
+    
+    void UpdateWaveInfoVictory()
     {
         // enable panel
         transform.GetChild(0).gameObject.SetActive(true);

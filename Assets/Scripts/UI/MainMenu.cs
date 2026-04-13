@@ -5,6 +5,7 @@ public class MainMenu : MonoBehaviour
 {
     [SerializeField] private string _levelString = "Level1";
     [SerializeField] private GameObject _creditsDialog;
+    [SerializeField] private GameObject _notesDialog;
     [SerializeField] private GameObject _settingsDialog;
 
     void Awake()
@@ -35,6 +36,11 @@ public class MainMenu : MonoBehaviour
     public void OpenCreditsDialog()
     {
         _creditsDialog.SetActive(true);
+    }
+
+    public void OpenNotesDialog()
+    {
+        _notesDialog.SetActive(true);
     }
 
     public void OpenSettingsDialog()

@@ -124,7 +124,7 @@ GameObject:
   - component: {fileID: 9181706971547006782}
   - component: {fileID: 1109941545479866836}
   - component: {fileID: 5999669146625697436}
-  m_Layer: 7
+  m_Layer: 12
   m_Name: AttackBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -235,7 +235,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e3c18166989b4743b5112922a19b72e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SingleHitBox
-  damage: 1
+  damage: 100000
   _playerHealth: {fileID: 0}
   _attackPerformed: 0
 --- !u!1 &6210043020216364245
@@ -658,6 +658,8 @@ MonoBehaviour:
   maxHealth: 1
   currentHealth: 0
   moneyValue: 1
+  isBoss: 0
+  _endGoal: {fileID: 0}
   damageParticleSystemPrefab: {fileID: 4993949556884765538, guid: 42598accb6289b24bb089b5c7d5b5d0c, type: 3}
   damageParticle: {fileID: 0}
 --- !u!82 &1572135191064186402

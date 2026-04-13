@@ -8,12 +8,12 @@ public class PauseManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        InputHandler.Instance.OnPauseInput += TogglePause;
+        InputHandler.Instance.OnPauseInput += InternalTogglePause;
     }
 
     void OnDisable()
     {
-        InputHandler.Instance.OnPauseInput -= TogglePause;
+        InputHandler.Instance.OnPauseInput -= InternalTogglePause;
     }
 
     // Update is called once per frame
@@ -22,10 +22,16 @@ public class PauseManager : MonoBehaviour
         
     }
 
-    public void TogglePause()
+    public void InternalTogglePause()
+    {
+        TogglePause(false);
+    }
+
+    public void TogglePause(bool displayPanel = true)
     {
         _isPaused = !_isPaused;
         Time.timeScale = _isPaused ? 0 : 1;
-        pausePanel.SetActive(_isPaused);
+        if(displayPanel)
+            pausePanel.SetActive(_isPaused);
     }
 }
