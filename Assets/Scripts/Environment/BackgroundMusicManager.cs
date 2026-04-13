@@ -4,6 +4,7 @@ public class BackgroundMusicManager : MonoBehaviour
 {
     public static BackgroundMusicManager instance { get; private set; }
     private AudioSource _audioSource;
+    [SerializeField] private int selectedIndex;
     [SerializeField] private AudioClip[] _musicClips;
     
     void Awake()
@@ -24,14 +25,16 @@ public class BackgroundMusicManager : MonoBehaviour
     void Start()
     {
         _audioSource.volume = SettingsManager.instance.musicVolume;
-        _audioSource.clip = _musicClips[0];
+        _audioSource.clip = _musicClips[SettingsManager.instance.musicOption];
         SettingsManager.instance.OnMusicVolumeChange += ChangeMusicVolume;
+        SettingsManager.instance.OnMusicOptionChange += ChangeMusicOption;
         _audioSource.Play();
     }
 
     void OnDisable()
     {
         SettingsManager.instance.OnMusicVolumeChange -= ChangeMusicVolume;
+        SettingsManager.instance.OnMusicOptionChange -= ChangeMusicOption;
     }
 
     private void ChangeMusicVolume(float volume)
@@ -41,9 +44,15 @@ public class BackgroundMusicManager : MonoBehaviour
 
     public void ChangeMusicOption(int index)
     {
-        _audioSource.Stop();
-        _audioSource.clip = _musicClips[index];
-        _audioSource.Play();
+        Debug.Log($"[BackgroundMusicManager] Changing music option to {index}");
+        if (index != selectedIndex)
+        {
+            
+            _audioSource.Stop();
+            _audioSource.clip = _musicClips[index];
+            _audioSource.Play();
+            selectedIndex = index;
+        }
     }
 
     // Update is called once per frame

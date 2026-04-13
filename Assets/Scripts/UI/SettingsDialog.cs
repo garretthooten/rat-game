@@ -21,6 +21,7 @@ public class SettingsDialog : MonoBehaviour
     {
         _sfxVolumeSlider.value = SettingsManager.instance.sfxVolume;
         _musicVolumeSlider.value = SettingsManager.instance.musicVolume;
+        _musicOptionsDropdown.value = SettingsManager.instance.musicOption;
         _fullscreenToggle.isOn = SettingsManager.instance.fullscreen == 1 ? true : false;
     }
 
@@ -52,6 +53,6 @@ public class SettingsDialog : MonoBehaviour
     void SetMusicOption(int index)
     {
         Debug.Log($"Setting music option to {index}");
-        BackgroundMusicManager.instance?.ChangeMusicOption(index);
+        SettingsManager.instance?.SetMusicOption(index);
     }
 }

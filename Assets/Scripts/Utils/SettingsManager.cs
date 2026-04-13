@@ -6,10 +6,12 @@ public class SettingsManager : MonoBehaviour
     public static SettingsManager instance { private set; get; }
     public float sfxVolume;
     public float musicVolume;
+    public int musicOption;
     public int fullscreen;
 
     public event Action<float> OnSFXVolumeChange;
     public event Action<float> OnMusicVolumeChange;
+    public event Action<int> OnMusicOptionChange;
     //public event Action OnFullscreenChange;
 
     void Awake()
@@ -31,11 +33,13 @@ public class SettingsManager : MonoBehaviour
             PlayerPrefs.SetFloat("SFXVolume", 1.0f);
             PlayerPrefs.SetFloat("MusicVolume", 1.0f);
             PlayerPrefs.SetInt("Fullscreen", 0);
+            PlayerPrefs.SetInt("MusicOption", 0);
             PlayerPrefs.SetInt("Initialized", 1);
         }
         Debug.Log("Reading playerprefs");
         sfxVolume = PlayerPrefs.GetFloat("SFXVolume");
         musicVolume = PlayerPrefs.GetFloat("MusicVolume");
+        musicOption = PlayerPrefs.GetInt("MusicOption");
         fullscreen = PlayerPrefs.GetInt("Fullscreen");
         Screen.fullScreen = fullscreen == 1 ? true : false;
         
@@ -53,6 +57,13 @@ public class SettingsManager : MonoBehaviour
         musicVolume = volume;
         PlayerPrefs.SetFloat("MusicVolume", volume);
         OnMusicVolumeChange?.Invoke(volume);
+    }
+
+    public void SetMusicOption(int option)
+    {
+        musicOption = option;
+        PlayerPrefs.SetInt("MusicOption", option);
+        OnMusicOptionChange?.Invoke(option);
     }
 
     public void SetFullscreen(bool value)
