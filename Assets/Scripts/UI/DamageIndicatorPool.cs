@@ -36,8 +36,6 @@ public class DamageIndicatorPool : MonoBehaviour
 
             instance.SetActive(false);
             _indicators.Add(indicator);
-            
-            //_indicators.Append(instance.GetComponent<DamageIndicator>());
         }
     }
 

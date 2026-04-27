@@ -15,16 +15,6 @@ public class Health : MonoBehaviour
     public GameObject damageParticleSystemPrefab;
     public ParticleSystem damageParticle;
     
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Awake()
-    {
-        //currentHealth = maxHealth;
-    }
-
-    private void Start()
-    {
-        
-    }
 
     private void OnEnable()
     {
@@ -50,7 +40,6 @@ public class Health : MonoBehaviour
                 _endGoal.Unlock();
             }
             gameObject.SetActive(false);
-            //Destroy(gameObject);
         }
     }
 
@@ -66,7 +55,6 @@ public class Health : MonoBehaviour
                 damageParticle = Instantiate(damageParticleSystemPrefab).GetComponent<ParticleSystem>();
                 damageParticle.transform.SetParent(transform, true);
             }
-            //Debug.Log("Got normal and stuff");
             damageParticle.transform.position = impactPoint;
             damageParticle.transform.forward = impactNormal;
             damageParticle.Play();

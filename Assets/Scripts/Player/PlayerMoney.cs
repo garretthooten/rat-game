@@ -31,24 +31,10 @@ public class PlayerMoney : MonoBehaviour
             OnMoneyChange -= UpdateMoneyDebugText;
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     private void UpdateMoneyDebugText()
     {
         _debugText.text = $"Money: {currentMoney}";
     }
-
-    //public void GetCurrentBalance()
 
     public void AddMoney(int value)
     {

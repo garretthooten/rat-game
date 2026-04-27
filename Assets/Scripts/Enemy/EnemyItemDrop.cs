@@ -20,12 +20,6 @@ public class EnemyItemDrop : MonoBehaviour
         _health.OnDeath -= DropItem;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     void DropItem(Health health)
     {
         // drop item

@@ -56,12 +56,6 @@ public class GameOverPanel : MonoBehaviour
     {
         transform.GetChild(0).gameObject.SetActive(false);
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
     
     
 }

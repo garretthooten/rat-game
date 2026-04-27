@@ -115,8 +115,6 @@ public class PlayerCombat : MonoBehaviour
             var originMouse = Camera.main.ScreenPointToRay(mousePosition);
             if (Physics.Raycast(originMouse, out hit, 999f, _layerMask))
             {
-                // visualize hit point
-                //MakeCursorMarker(hit.point);
                 
                 Vector3 playerToHitDirection = hit.point - transform.position;
                 Vector3 normalizedDirection = playerToHitDirection.normalized;
@@ -124,9 +122,6 @@ public class PlayerCombat : MonoBehaviour
                 
                 if (currentGun)
                 {
-                    //MyLogger.Info("Pulling gun trigger");
-                    //MyLogger.Info($"Pulling gun trigger");
-                    //currentGun.Fire(hit.point);
                     currentGun.PullTrigger(hit.point);
                 }
             }

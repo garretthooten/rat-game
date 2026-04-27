@@ -78,10 +78,6 @@ public class PlayerMovement : MonoBehaviour
 
         move.y = gravity * gravityMultiplier;
         _controller.Move(move * Time.deltaTime);
-        
-        // temp debugging
-        //Vector3 move = new Vector3(_inputHandler.move.x, 0f, _inputHandler.move.y);
-        //_controller.Move(move * moveSpeed * Time.deltaTime);
     }
 
     public void ChangeSpeed(float percent)

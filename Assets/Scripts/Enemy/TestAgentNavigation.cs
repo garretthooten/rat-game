@@ -17,11 +17,6 @@ public class TestAgentNavigation : MonoBehaviour
         StartCoroutine(NavigationRoutine());
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-    }
-
     public IEnumerator NavigationRoutine()
     {
         while (true)

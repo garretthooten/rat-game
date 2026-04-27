@@ -34,7 +34,6 @@ public class BuyableDoor : MonoBehaviour
         {
             if (PlayerMoney.Instance.currentMoney >= price)
             {
-                //PlayerMoney.Instance.currentMoney -= price;
                 PlayerMoney.Instance.RemoveMoney(price);
                 gameObject.SetActive(false);
             }
@@ -43,17 +42,5 @@ public class BuyableDoor : MonoBehaviour
                 Debug.Log("Purchase failed, player does not have enough money");
             }
         }
-    }
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

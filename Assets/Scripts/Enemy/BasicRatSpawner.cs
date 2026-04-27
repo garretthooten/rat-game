@@ -30,12 +30,6 @@ public class BasicRatSpawner : MonoBehaviour
             StopCoroutine(_spawnCoroutine);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     IEnumerator SpawnRoutine()
     {
         while (true)
@@ -49,7 +43,6 @@ public class BasicRatSpawner : MonoBehaviour
                     {
                         rat.transform.position = _ratSpawnPoint.position;
                         rat.transform.rotation = _ratSpawnPoint.rotation;
-                        //GameObject rat = Instantiate(_ratPrefab, _ratSpawnPoint.position, _ratSpawnPoint.rotation);
                         rat.GetComponent<Health>().OnDeath += HandleRatDeath;
                         currentRatCount++;
                     }

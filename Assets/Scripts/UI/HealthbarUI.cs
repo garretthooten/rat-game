@@ -40,10 +40,5 @@ public class HealthbarUI : MonoBehaviour
     {
         PlayerHealth.OnPlayerHealthChange -= UpdateHealthbar;
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    
 }
