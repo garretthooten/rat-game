@@ -5,13 +5,6 @@ public class BulletTrail : MonoBehaviour
 {
     public float speed = 10f;
     public float lifeTime = 0.75f;
-    //public IEnumerator moveTrailCoroutine;
-
-    // public void OnDisable()
-    // {
-    //     if (moveTrailCoroutine != null)
-    //         StopCoroutine(moveTrailCoroutine);
-    // }
     
     public void MoveTrail(Vector3 spawnPoint, Vector3 hitPoint)
     {

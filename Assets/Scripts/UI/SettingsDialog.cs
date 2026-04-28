@@ -25,12 +25,6 @@ public class SettingsDialog : MonoBehaviour
         _fullscreenToggle.isOn = SettingsManager.instance.fullscreen == 1 ? true : false;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     void SetSFXVolume(float value)
     {
         Debug.Log($"Setting SFX volume to {value}");
@@ -46,7 +40,6 @@ public class SettingsDialog : MonoBehaviour
     void SetFullscreen(bool value)
     {
         Debug.Log($"Setting fullscreen to {value}");
-        //int boolValue = value ? 1 : 0;
         SettingsManager.instance?.SetFullscreen(value);
     }
 

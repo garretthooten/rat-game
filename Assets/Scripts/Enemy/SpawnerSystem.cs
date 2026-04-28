@@ -10,8 +10,6 @@ public class SpawnerSystem : MonoBehaviour
 {
     public enum WaveState {Waiting, InProgress, InBetween, Finished}
     public static SpawnerSystem Instance { get; private set; }
-
-    //public GameObject ratPrefab;
     public ObjectPool ratPool;
 
     public Room currentRoom;
@@ -100,8 +98,6 @@ public class SpawnerSystem : MonoBehaviour
         waveState = WaveState.Finished;
     }
 
-    //public void IncrementRatKilled
-
     // Update is called once per frame
     void Update()
     {
@@ -135,7 +131,6 @@ public class SpawnerSystem : MonoBehaviour
         if(currentRoom != null)
         {
             int chosenTransformIndex = Random.Range(0, currentRoom.spawnTransforms.Length);
-            //Debug.Log($"Chosen index: {chosenTransformIndex} (length {currentRoom.spawnTransforms.Length})");
             GameObject rat = ratPool.GetObject();
             rat.transform.position = currentRoom.spawnTransforms[chosenTransformIndex].position;
 

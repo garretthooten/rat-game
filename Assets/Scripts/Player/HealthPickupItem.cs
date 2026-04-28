@@ -15,14 +15,8 @@ public class HealthPickupItem : MonoBehaviour
 
     private void OnEnable()
     {
-        //_audioSource = GetComponent<AudioSource>();
-        //_meshRenderer = GetComponent<MeshRenderer>();
         _collider = GetComponent<SphereCollider>();
-
-        // enable components when pulled from pool or spawned
-        //_audioSource.enabled = true;
         _collider.enabled = true;
-        //_meshRenderer.enabled = true;
     }
 
     public void OnTriggerEnter(Collider other)
@@ -37,7 +31,6 @@ public class HealthPickupItem : MonoBehaviour
             {
                 other.GetComponent<PlayerHealth>()?.Heal(amount);
                 gameObject.SetActive(false);
-                //Destroy(gameObject);
             }
         }
     }
@@ -45,13 +38,9 @@ public class HealthPickupItem : MonoBehaviour
     private IEnumerator PickupObjectWithAudio(Collider other)
     {
         other.GetComponent<PlayerHealth>()?.Heal(amount);
-        //_meshRenderer.enabled = false;
         _collider.enabled = false;
-        //_audioSource.clip = _pickupSoundEffect;
         AudioSource.PlayClipAtPoint(_pickupSoundEffect, transform.position, SettingsManager.instance.sfxVolume);
-        //yield return new WaitUntil(() => _audioSource.time >= _pickupSoundEffect.length);
         gameObject.SetActive(false);
         yield return null; // not optimal but just temporary
-        // later rework pickups to use PlayClipAtPoint instead of a coroutine....
     }
 }

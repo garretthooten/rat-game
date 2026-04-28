@@ -16,12 +16,6 @@ public class PauseManager : MonoBehaviour
         InputHandler.Instance.OnPauseInput -= InternalTogglePause;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void InternalTogglePause()
     {
         TogglePause();

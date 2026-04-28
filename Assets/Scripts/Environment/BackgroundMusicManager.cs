@@ -54,10 +54,5 @@ public class BackgroundMusicManager : MonoBehaviour
             selectedIndex = index;
         }
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    
 }

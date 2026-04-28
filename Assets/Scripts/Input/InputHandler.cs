@@ -70,7 +70,7 @@ public class InputHandler : MonoBehaviour
         _meleeAction.canceled += OnMelee;
         _reloadAction.performed += OnReload;
         _reloadAction.canceled += OnReload;
-        // makethis a consumabel input?
+        // make this a consumable input?
         _weaponSelectAction.performed += OnWeaponSelect;
         _jumpAction.performed += OnJump;
         _jumpAction.canceled += OnJump;

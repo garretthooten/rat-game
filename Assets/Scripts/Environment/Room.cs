@@ -7,20 +7,6 @@ public class Room : MonoBehaviour
     public bool finalRoomEvent = false;
     [SerializeField] private GameObject _bossRat;
 
-    //[SerializeField] private string _playerTag; I dont think I need this I can just manage collision layers
-    
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     private void OnTriggerEnter(Collider other)
     {
         Debug.Log($"Player entered room {name} / {other.gameObject.name}");
