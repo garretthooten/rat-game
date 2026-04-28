@@ -7,6 +7,10 @@
 .AppleDouble
 .LSOverride
 
+# rider
+.idea
+.idea/
+
 # Icon must end with two \r
 Icon
 
