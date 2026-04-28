@@ -276,7 +276,7 @@ public class Gun : MonoBehaviour
 
     private IEnumerator StartReloadTimer()
     {
-        _audioSource.PlayOneShot(_reloadSound, _sfxVolume);
+        _audioSource.PlayOneShot(_reloadSound, SettingsManager.instance.sfxVolume);
         yield return new WaitForSeconds(_reloadSound.length);
         int ammoNeeded = _maxClipAmmo - _currentClipAmmo;
         int ammoToLoad = Mathf.Min(ammoNeeded, _currentAmmo);
