@@ -42,57 +42,64 @@ public class BSPNode : MonoBehaviour
         
         bool horizontal = Random.Range(0f, 9f) > 4.5f; // true for horizontal, false for vertical
         float splitPercent = Random.Range(0.3f, 0.6f);
+        Debug.Log("splitpercent: " + splitPercent);
 
-        Vector3 adjustedScale;
-        Vector3 adjustedScale1;
-        Vector3 adjustedPosition, adjustedPosition1, adjustedOrigin, adjustedOrigin1;
+        Vector3 leftOrigin, leftPosition, rightOrigin, rightPosition, leftScale, rightScale;
         
-        if (true)
+        if (horizontal)
         {
-            var parentWidth = transform.localScale.x;
-            float minX = -parentWidth / 2f;
-            float maxX = parentWidth / 2f;
+            leftOrigin = transform.position - new Vector3(transform.localScale.x / 2f, transform.position.z, transform.position.z);
+            leftScale = new Vector3(transform.localScale.x * splitPercent, transform.localScale.y,
+                transform.localScale.z);
+            leftPosition = new Vector3(leftOrigin.x + leftScale.x / 2, leftOrigin.y, leftOrigin.z);
 
-            float splitX = Mathf.Lerp(minX, maxX, splitPercent);
+            rightOrigin = new Vector3(leftPosition.x + (leftScale.x / 2), leftOrigin.y, leftOrigin.z);
+            rightScale = new Vector3(transform.localScale.x * (1 - splitPercent),  transform.localScale.y, transform.localScale.z);
+            rightPosition = new Vector3(rightOrigin.x + rightScale.x / 2, rightOrigin.y, rightOrigin.z);
 
-// left
-            float leftWidth = splitX - minX;
-            float leftCenter = minX + leftWidth / 2f;
+            // var marker1 = MyLogger.MakeDebugSphere(leftOrigin, "leftOrigin");
+            // var marker2 = MyLogger.MakeDebugSphere(leftPosition, "leftPosition");
+            // var marker3 = MyLogger.MakeDebugSphere(rightOrigin, "rightOrigin");
+            // var marker4 = MyLogger.MakeDebugSphere(rightPosition, "rightPosition");
+            
+            var left = CreateChildNode(leftPosition, leftScale, this.myDepth + 1, totalTreeDepth);
+            var right = CreateChildNode(rightPosition, rightScale, this.myDepth + 1, totalTreeDepth);
 
-// right
-            float rightWidth = maxX - splitX;
-            float rightCenter = splitX + rightWidth / 2f;
-
-            adjustedPosition = new Vector3(leftCenter, 0f, 0f);
-            adjustedPosition1 = new Vector3(rightCenter, 0f, 0f);
-
-            adjustedScale = new Vector3(leftWidth, 1f, 1f);
-            adjustedScale1 = new Vector3(rightWidth, 1f, 1f);
+            left = left;
+            right = right;
+            
+            
         }
         else
         {
-            adjustedOrigin = new Vector3(0f, 0f, -transform.localScale.z / 2);
-            
-            adjustedScale = new Vector3(1f, 1f, splitPercent);
-            adjustedScale1 = new Vector3(1f, 1f, 1f - splitPercent);
+            leftOrigin = transform.position - new Vector3(transform.position.x, transform.position.y, transform.localScale.z / 2f);
+            leftScale = new Vector3(transform.localScale.x, transform.localScale.y,
+                transform.localScale.z * splitPercent);
+            leftPosition = new Vector3(leftOrigin.x, leftOrigin.y, leftOrigin.z + leftScale.z / 2);
 
+            rightOrigin = new Vector3(leftOrigin.x, leftOrigin.y, leftPosition.z + (leftScale.z / 2));
+            rightScale = new Vector3(transform.localScale.x,  transform.localScale.y, transform.localScale.z * (1 - splitPercent));
+            rightPosition = new Vector3(rightOrigin.x, rightOrigin.y, rightOrigin.z + rightScale.z / 2);
+
+            // var marker1 = MyLogger.MakeDebugSphere(leftOrigin, "leftOrigin");
+            // var marker2 = MyLogger.MakeDebugSphere(leftPosition, "leftPosition");
+            // var marker3 = MyLogger.MakeDebugSphere(rightOrigin, "rightOrigin");
+            // var marker4 = MyLogger.MakeDebugSphere(rightPosition, "rightPosition");
             
-            adjustedPosition = new Vector3(0f, 0f, adjustedOrigin.z + adjustedScale.z/2f);
-            adjustedOrigin1 = new Vector3(0f, 0f, adjustedPosition.z + adjustedScale.z / 2);
-            adjustedPosition1 = new Vector3(0f, 0f, adjustedOrigin1.z  + adjustedScale1.z / 2);
+            var left = CreateChildNode(leftPosition, leftScale, this.myDepth + 1, totalTreeDepth);
+            var right = CreateChildNode(rightPosition, rightScale, this.myDepth + 1, totalTreeDepth);
+
+            left = left;
+            right = right;
         }
-        
-        
-
-        left = CreateChildNode(adjustedScale, adjustedPosition, myDepth + 1, totalTreeDepth);
-        right = CreateChildNode(adjustedScale1, adjustedPosition1, myDepth + 1, totalTreeDepth);
+        GetComponent<MeshRenderer>().enabled = false;
     }
 
-    BSPNode CreateChildNode(Vector3 size, Vector3 position, int depth, int totalDepth)
+    BSPNode CreateChildNode(Vector3 position, Vector3 size, int depth, int totalDepth)
     {
         GameObject childNode = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        childNode.transform.SetParent(transform, false);
-        childNode.transform.localPosition = position;
+        //childNode.transform.SetParent(transform, false);
+        childNode.transform.position = position;
         childNode.transform.localScale = size;
         var node = childNode.AddComponent(typeof(BSPNode)) as BSPNode;
         if (node != null)

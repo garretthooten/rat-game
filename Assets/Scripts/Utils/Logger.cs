@@ -36,4 +36,18 @@ public class MyLogger
         #endif
     }
 
+    public static GameObject MakeDebugSphere(Vector3 position, string name = null)
+    {
+        GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        sphere.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+        sphere.transform.position = position;
+
+        if (name != null)
+        {
+            sphere.name = name;
+        }
+        return sphere;
+    }
+    
+
 }
