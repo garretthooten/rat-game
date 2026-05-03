@@ -15,18 +15,20 @@ public class BSPNode : MonoBehaviour
             Debug.Log($"transform.localScale: {transform.localScale}\ntransform.lossyScale: {transform.lossyScale}");
             myDepth = 0;
             parent = null;
-            Init(myDepth, totalTreeDepth);
+            Init(myDepth, totalTreeDepth, leafPadding);
         }
     }
 
-    public void Init(int depth, int totalDepth, BSPNode p = null)
+    public void Init(int depth, int totalDepth, float padding, BSPNode p = null)
     {
         myDepth = depth;
         totalTreeDepth = totalDepth;
         parent = p;
+        leafPadding = padding;
         if (myDepth < totalTreeDepth)
         {
             Split();
+            Destroy(gameObject);
         }
         else
         {
@@ -45,7 +47,7 @@ public class BSPNode : MonoBehaviour
         GetComponent<MeshRenderer>().enabled = false;
 
         bool horizontal = Random.value > 0.5f;
-        float splitPercent = Random.Range(0.3f, 0.6f);
+        float splitPercent = Random.Range(0.4f, 0.5f);
         Debug.Log("splitpercent: " + splitPercent);
 
         Bounds bounds = new Bounds(transform.position, transform.localScale);
@@ -90,7 +92,7 @@ public class BSPNode : MonoBehaviour
         var node = childNode.AddComponent(typeof(BSPNode)) as BSPNode;
         if (node != null)
         {
-            node.Init(depth, totalDepth, this);
+            node.Init(depth, totalDepth, leafPadding, this);
         }
         return node;
     }
