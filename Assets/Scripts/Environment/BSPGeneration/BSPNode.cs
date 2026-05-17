@@ -12,7 +12,7 @@ public class BSPNode : MonoBehaviour
     public BSPNode parent, left, right;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    void Awake()
     {
         if (isRoot)
         {
@@ -108,5 +108,63 @@ public class BSPNode : MonoBehaviour
             node.Init(depth, totalDepth, leafPadding, this);
         }
         return node;
+    }
+
+    // Returns all leaf nodes adjacent to this leaf node.
+    // Should only be called on leaf nodes (left == null && right == null).
+    public List<BSPNode> GetAdjacencies()
+    {
+        var adjacent = new List<BSPNode>();
+        Bounds myBounds = new Bounds(transform.position, transform.localScale);
+
+        BSPNode current = this;
+        while (current.parent != null)
+        {
+            BSPNode par = current.parent;
+            BSPNode siblingSubtree = (par.left == current) ? par.right : par.left;
+
+            foreach (var leaf in GetLeaves(siblingSubtree))
+            {
+                Bounds leafBounds = new Bounds(leaf.transform.position, leaf.transform.localScale);
+                if (SharesEdge(myBounds, leafBounds))
+                    adjacent.Add(leaf);
+            }
+
+            current = par;
+        }
+
+        return adjacent;
+    }
+
+    private List<BSPNode> GetLeaves(BSPNode node)
+    {
+        var leaves = new List<BSPNode>();
+        if (node == null) return leaves;
+
+        if (node.left == null && node.right == null)
+            leaves.Add(node);
+        else
+        {
+            leaves.AddRange(GetLeaves(node.left));
+            leaves.AddRange(GetLeaves(node.right));
+        }
+        return leaves;
+    }
+
+    // Two leaf bounds share an edge if they touch on one axis (within the padding gap)
+    // and their ranges overlap on the other axis.
+    private bool SharesEdge(Bounds a, Bounds b)
+    {
+        // Each leaf is shrunk by leafPadding on x and z, so adjacent rooms have a
+        // gap of exactly leafPadding between their surfaces. The tolerance absorbs that gap.
+        float tolerance = leafPadding + 0.001f;
+
+        bool touchX = Mathf.Abs(a.max.x - b.min.x) <= tolerance || Mathf.Abs(b.max.x - a.min.x) <= tolerance;
+        bool overlapZ = a.min.z < b.max.z && b.min.z < a.max.z;
+
+        bool touchZ = Mathf.Abs(a.max.z - b.min.z) <= tolerance || Mathf.Abs(b.max.z - a.min.z) <= tolerance;
+        bool overlapX = a.min.x < b.max.x && b.min.x < a.max.x;
+
+        return (touchX && overlapZ) || (touchZ && overlapX);
     }
 }

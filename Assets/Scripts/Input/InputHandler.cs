@@ -35,6 +35,8 @@ public class InputHandler : MonoBehaviour
     public TMP_Text debugText;
 
     // subscribe actions
+    public event Action OnAttackInput;
+    public event Action OnAttackInputCanceled;
     public event Action OnMeleeInput;
     public event Action OnMeleeInputCanceled;
     public event Action OnDashInput;
@@ -120,9 +122,15 @@ public class InputHandler : MonoBehaviour
     void OnAttack(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
+        {
             attack = true;
+            OnAttackInput?.Invoke();
+        }
         else if (context.phase == InputActionPhase.Canceled)
+        {
             attack = false;
+            OnAttackInputCanceled?.Invoke();
+        }
     }
 
     void OnMelee(InputAction.CallbackContext context)

@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class BSPGenerator : MonoBehaviour
 {
-    public int binaryTreeLevels;
+    //public int binaryTreeLevels;
 
-    public BSPNode[] tree;
+    //public BSPNode[] tree;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
