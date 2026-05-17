@@ -1,7 +1,11 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class BSPNode : MonoBehaviour
 {
+    public static List<BSPNode> GeneratedNodes;
+    
     public bool isRoot = false;
     public int myDepth, totalTreeDepth;
     public float leafPadding = 0.01f;
@@ -28,13 +32,21 @@ public class BSPNode : MonoBehaviour
         if (myDepth < totalTreeDepth)
         {
             Split();
-            Destroy(gameObject);
+            gameObject.SetActive(false);
+            //Destroy(gameObject);
         }
         else
         {
             transform.localScale = new Vector3(transform.localScale.x - leafPadding,  transform.localScale.y, transform.localScale.z - leafPadding);
+            //GeneratedNodes.Append(this);
             GeneratedRoom.GenerateRoom(gameObject);
         }
+    }
+
+    public void DisableSelf()
+    {
+        gameObject.GetComponent<MeshRenderer>().enabled = false;
+        gameObject.GetComponent<BoxCollider>().enabled = false;
     }
 
     // Update is called once per frame
