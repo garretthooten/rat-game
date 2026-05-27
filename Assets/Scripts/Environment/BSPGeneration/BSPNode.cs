@@ -39,7 +39,7 @@ public class BSPNode : MonoBehaviour
         {
             transform.localScale = new Vector3(transform.localScale.x - leafPadding,  transform.localScale.y, transform.localScale.z - leafPadding);
             //GeneratedNodes.Append(this);
-            GeneratedRoom.GenerateRoom(gameObject);
+            //GeneratedRoom.GenerateRoom(gameObject);
         }
     }
 

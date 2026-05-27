@@ -412,6 +412,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf8932d2e1d8f4d78a1a29080949d711, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AdjacentNodeSelector
+  _selectedMaterial: {fileID: 2100000, guid: c13bb5abd77e7da43abed8863c11e9e0, type: 2}
+  _defaultMaterial: {fileID: 0}
 --- !u!4 &1291658977
 Transform:
   m_ObjectHideFlags: 0
@@ -522,7 +524,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.PlayerInput
   m_Actions: {fileID: -944628639613478452, guid: e774c5582d8b442ae803a8ddc5931c5b, type: 3}
-  m_NotificationBehavior: 0
+  m_NotificationBehavior: 3
   m_UIInputModule: {fileID: 0}
   m_DeviceLostEvent:
     m_PersistentCalls:

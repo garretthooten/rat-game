@@ -50,6 +50,7 @@ public class GeneratedRoom : MonoBehaviour
         // wall3.transform.SetParent(geometryContainer.transform, true);
         // wall4.transform.SetParent(geometryContainer.transform, true);
         
-        Destroy(roomNode);
+        //Destroy(roomNode);
+        container.transform.SetParent(roomNode.transform, true);
     }
 }
