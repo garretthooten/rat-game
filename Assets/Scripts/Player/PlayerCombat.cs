@@ -1,13 +1,14 @@
 using System;
 using System.Collections;
 using TMPro;
+using Unity.VisualScripting;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerCombat : MonoBehaviour
 {
-
-    private InputHandler _input;
+    private bool _subscribedToInputEvents = false;
     private PlayerMovement _movement;
     private bool _lastAttack;
     private GameObject _cursorMarker;
@@ -43,7 +44,6 @@ public class PlayerCombat : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
-        _input = GetComponent<InputHandler>();
         _movement = GetComponent<PlayerMovement>();
         _audioSource = GetComponent<AudioSource>();
         _layerMask = LayerMask.GetMask("Floor");
@@ -52,21 +52,62 @@ public class PlayerCombat : MonoBehaviour
             MyLogger.Error("Failed to get weapon attach transform");
         }
         
-        ChangeWeapons();
+        ChangeWeapons(1);
+    }
+
+    void SubscribeToInputEvents()
+    {
+        if (InputHandler.Instance != null)
+        {
+            InputHandler.Instance.OnReloadInput += Reload;
+            InputHandler.Instance.OnMeleeInput += StartMeleeAttackInput;
+            InputHandler.Instance.OnMeleeInputCanceled += StopMeleeAttackInput;
+            InputHandler.Instance.OnAttackInput += Attack;
+            InputHandler.Instance.OnAttackInputCanceled += StopAttack;
+            InputHandler.Instance.OnChangeWeapon += ChangeWeapons;
+
+            _subscribedToInputEvents = true;
+        }
+        else
+        {
+            Debug.LogError("Failed to find input handler instance in SubscribeToInputEvents");
+        }
+    }
+    void UnsubscribeToInputEvents()
+    {
+        if (InputHandler.Instance != null)
+        {
+            InputHandler.Instance.OnReloadInput -= Reload;
+            InputHandler.Instance.OnMeleeInput -= StartMeleeAttackInput;
+            InputHandler.Instance.OnMeleeInputCanceled -= StopMeleeAttackInput;
+            InputHandler.Instance.OnAttackInput -= Attack;
+            InputHandler.Instance.OnAttackInputCanceled -= StopAttack;
+            InputHandler.Instance.OnChangeWeapon -= ChangeWeapons;
+
+            _subscribedToInputEvents = false;
+        }
+        else
+        {
+            Debug.LogError("Failed to find input handler instance in UnsubscribeToInputEvents");
+        }
+    }
+
+    void Start()
+    {
+        SubscribeToInputEvents();
     }
 
     void OnEnable()
     {
-        _input.OnMeleeInput += StartMeleeAttackInput;
-        _input.OnMeleeInputCanceled += StopMeleeAttackInput;
+        if(!_subscribedToInputEvents)
+            SubscribeToInputEvents();
         _smallMeleeAttackHurtbox.SetActive(false);
         _bigMeleeAttackHurtbox.SetActive(false);
     }
 
     void OnDisable()
     {
-        _input.OnMeleeInput -= StartMeleeAttackInput;
-        _input.OnMeleeInputCanceled -= StopMeleeAttackInput;
+        UnsubscribeToInputEvents();
     }
 
     void MakeCursorMarker(Vector3 point)
@@ -98,18 +139,35 @@ public class PlayerCombat : MonoBehaviour
             Destroy(_cursorMarker);
         }
     }
+
+    void Reload()
+    {
+        currentGun.Reload();
+    }
+
+    void Attack()
+    {
+        if (!_isMeleeAttacking)
+        {
+            isAttacking = true;
+        }
+    }
+
+    void StopAttack()
+    {
+        isAttacking = false;
+        if (currentGun)
+        {
+            DeleteCursorMarker();
+            currentGun.ReleaseTrigger();
+        }
+    }
     
     // Update is called once per frame
     void Update()
     {
-        if (_selectedWeaponIndex != _input.selectedWeapon - 1)
+        if (isAttacking)
         {
-            ChangeWeapons();
-        }
-        
-        if (_input.attack && !_input.melee && !_isMeleeAttacking)
-        {
-            isAttacking = true;
             Vector2 mousePosition = Mouse.current.position.ReadValue();
             RaycastHit hit;
             var originMouse = Camera.main.ScreenPointToRay(mousePosition);
@@ -125,39 +183,23 @@ public class PlayerCombat : MonoBehaviour
                     currentGun.PullTrigger(hit.point);
                 }
             }
-            
         }
-        else
-        {
-            isAttacking = false;
-            if (_lastAttack && currentGun)
-            {
-                DeleteCursorMarker();
-                currentGun.ReleaseTrigger();
-            }
-        }
-        _lastAttack = _input.attack;
-
-        if (_input.reload && currentGun)
-        {
-            currentGun.Reload();
-        }
-
+        
         if (_debugText)
         {
             _debugText.text = MakeDebugString();
         }
     }
 
-    private void ChangeWeapons()
+    private void ChangeWeapons(int index)
     {
-        if (_input.selectedWeapon > weaponInventory.Length)
+        if (index > weaponInventory.Length)
         {
             MyLogger.Error("Selected weapon outside of inventory range");
             return;
         }
 
-        _selectedWeaponIndex = _input.selectedWeapon - 1;
+        _selectedWeaponIndex = index - 1;
 
         // Deactivate current gun
         currentGun.gameObject.SetActive(false);
@@ -189,27 +231,21 @@ public class PlayerCombat : MonoBehaviour
 
     private void StartMeleeAttackInput()
     {
-        StartCoroutine(MeleeAttackProcess());
+        _timeOfMeleeInputStart = Time.time;
+        _movement.ChangeSpeed(_meleeChargeMoveSpeedFactor);
     }
 
     private void StopMeleeAttackInput()
     {
         _timeOfMeleeInputStop = Time.time;
         _meleeInputPressed = false;
-    }
-
-    IEnumerator MeleeAttackProcess()
-    {
-        _timeOfMeleeInputStart = Time.time;
-        _movement.ChangeSpeed(_meleeChargeMoveSpeedFactor);
-        while(_input.melee)
-        {
-            yield return null;
-        }
-        _timeOfMeleeInputStop = Time.time;
         float duration = _timeOfMeleeInputStop - _timeOfMeleeInputStart;
         bool isBigMeleeAttack = (duration > _meleeInputDurationWindow);
-        Debug.Log($"Melee attack lifted, duration: {duration}s, isBigMeleeAttack: {isBigMeleeAttack}");
+        StartCoroutine(MeleeAttackProcess(isBigMeleeAttack));
+    }
+
+    IEnumerator MeleeAttackProcess(bool isBigMeleeAttack)
+    {
         _isMeleeAttacking = true;
         if(!isBigMeleeAttack)
         {
