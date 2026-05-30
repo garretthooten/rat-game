@@ -8,6 +8,7 @@ public class SettingsDialog : MonoBehaviour
     [SerializeField] private Slider _musicVolumeSlider;
     [SerializeField] private Toggle _fullscreenToggle;
     [SerializeField] private TMP_Dropdown _musicOptionsDropdown;
+    [SerializeField] private Toggle _holdToFireToggle;
 
     void Awake()
     {
@@ -15,6 +16,7 @@ public class SettingsDialog : MonoBehaviour
         _musicVolumeSlider.onValueChanged.AddListener(SetMusicVolume);
         _fullscreenToggle.onValueChanged.AddListener(SetFullscreen);
         _musicOptionsDropdown.onValueChanged.AddListener(SetMusicOption);
+        _holdToFireToggle.onValueChanged.AddListener(SetHoldToFire);
     }
 
     void Start()
@@ -23,6 +25,7 @@ public class SettingsDialog : MonoBehaviour
         _musicVolumeSlider.value = SettingsManager.instance.musicVolume;
         _musicOptionsDropdown.value = SettingsManager.instance.musicOption;
         _fullscreenToggle.isOn = SettingsManager.instance.fullscreen == 1 ? true : false;
+        _holdToFireToggle.isOn = SettingsManager.instance.holdToShootSemiautomaticWeapons == 1 ? true : false;
     }
 
     void SetSFXVolume(float value)
@@ -41,6 +44,12 @@ public class SettingsDialog : MonoBehaviour
     {
         Debug.Log($"Setting fullscreen to {value}");
         SettingsManager.instance?.SetFullscreen(value);
+    }
+
+    void SetHoldToFire(bool value)
+    {
+        Debug.Log($"Setting hold to fire to {value}");
+        SettingsManager.instance?.SetHoldToShoot(value);
     }
 
     void SetMusicOption(int index)

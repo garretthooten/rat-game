@@ -8,10 +8,13 @@ public class SettingsManager : MonoBehaviour
     public float musicVolume;
     public int musicOption;
     public int fullscreen;
+    public int holdToShootSemiautomaticWeapons;
 
     public event Action<float> OnSFXVolumeChange;
     public event Action<float> OnMusicVolumeChange;
     public event Action<int> OnMusicOptionChange;
+
+    public event Action<int> OnHoldToShootSemiChange;
     //public event Action OnFullscreenChange;
 
     void Awake()
@@ -34,6 +37,7 @@ public class SettingsManager : MonoBehaviour
             PlayerPrefs.SetFloat("MusicVolume", 1.0f);
             PlayerPrefs.SetInt("Fullscreen", 0);
             PlayerPrefs.SetInt("MusicOption", 0);
+            PlayerPrefs.SetInt("HoldToShootSemi", 0);
             PlayerPrefs.SetInt("Initialized", 1);
         }
         Debug.Log("Reading playerprefs");
@@ -41,6 +45,7 @@ public class SettingsManager : MonoBehaviour
         musicVolume = PlayerPrefs.GetFloat("MusicVolume");
         musicOption = PlayerPrefs.GetInt("MusicOption");
         fullscreen = PlayerPrefs.GetInt("Fullscreen");
+        holdToShootSemiautomaticWeapons = PlayerPrefs.GetInt("HoldToShootSemi");
         Screen.fullScreen = fullscreen == 1 ? true : false;
         
         DontDestroyOnLoad(gameObject);
@@ -70,6 +75,12 @@ public class SettingsManager : MonoBehaviour
     {
         PlayerPrefs.SetInt("Fullscreen", value ? 1 : 0);
         Screen.fullScreen = value;
+    }
+
+    public void SetHoldToShoot(bool value)
+    {
+        PlayerPrefs.SetInt("HoldToShootSemi", value ? 1 : 0);
+        OnHoldToShootSemiChange?.Invoke(value ? 1 : 0);
     }
     
 }
