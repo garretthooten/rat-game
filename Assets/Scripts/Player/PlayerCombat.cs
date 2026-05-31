@@ -8,6 +8,8 @@ using UnityEngine.InputSystem;
 
 public class PlayerCombat : MonoBehaviour
 {
+    public static PlayerCombat Instance { get; private set; }
+
     private bool _subscribedToInputEvents = false;
     private PlayerMovement _movement;
     private bool _lastAttack;
@@ -40,10 +42,17 @@ public class PlayerCombat : MonoBehaviour
     public bool isAttacking;
     public Gun currentGun;
     public GameObject[] weaponInventory; // must have gun component
+
+    [Header("New Weapon System")]
+    public int lightAmmoCount, mediumAmmoCount, heavyAmmoCount, shotgunAmmoCount;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
+        if (Instance != null && Instance != this)
+            return;
+        Instance = this;
+
         _movement = GetComponent<PlayerMovement>();
         _audioSource = GetComponent<AudioSource>();
         _layerMask = LayerMask.GetMask("Floor");
