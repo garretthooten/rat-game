@@ -3,7 +3,7 @@ using UnityEngine;
 public class WeaponInstance : MonoBehaviour
 {
     public AmmoType ammoType;
-    public int maxAmmo;
+    public int magCapacity;
     public int currentAmmo;
     public float fireRate;
     public float spread;

@@ -31,14 +31,14 @@ public abstract class FiringBehaviour : MonoBehaviour
                 return;
         }
 
-        if(availableAmmoInStash <= _weaponInstance.maxAmmo)
+        if(availableAmmoInStash <= _weaponInstance.magCapacity)
         {
             ammoToLoad = availableAmmoInStash;
             leftoverAmmo = 0;
         }
         else
         {
-            ammoToLoad = _weaponInstance.maxAmmo;
+            ammoToLoad = _weaponInstance.magCapacity;
             leftoverAmmo = availableAmmoInStash - ammoToLoad;
             if(leftoverAmmo <= 0) leftoverAmmo = 0;
         }
