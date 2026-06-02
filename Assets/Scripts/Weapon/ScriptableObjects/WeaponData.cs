@@ -13,6 +13,7 @@ public enum AmmoType
 [CreateAssetMenu(fileName = "WeaponData", menuName = "ScriptableObjects/WeaponData")]
 public class WeaponData : ScriptableObject
 {
+    public string displayName;
     public float damagePerBullet;
     public float fireRate;
     public float spread;
