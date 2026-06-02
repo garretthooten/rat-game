@@ -76,6 +76,7 @@ public class PlayerCombat : MonoBehaviour
             InputHandler.Instance.OnChangeWeapon += ChangeWeapons;
 
             _subscribedToInputEvents = true;
+            Debug.Log("Successfully subscribed to input events");
         }
         else
         {
@@ -94,6 +95,7 @@ public class PlayerCombat : MonoBehaviour
             InputHandler.Instance.OnChangeWeapon -= ChangeWeapons;
 
             _subscribedToInputEvents = false;
+            Debug.Log("Successfully unsubscribed to input events");
         }
         else
         {
@@ -103,7 +105,7 @@ public class PlayerCombat : MonoBehaviour
 
     void Start()
     {
-        SubscribeToInputEvents();
+        //SubscribeToInputEvents();
     }
 
     void OnEnable()
