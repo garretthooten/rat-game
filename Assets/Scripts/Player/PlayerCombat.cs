@@ -44,7 +44,7 @@ public class PlayerCombat : MonoBehaviour
     public GameObject[] weaponInventory; // must have gun component
 
     [Header("New Weapon System")]
-    public int lightAmmoCount, mediumAmmoCount, heavyAmmoCount, shotgunAmmoCount;
+    public int lightAmmoCount, mediumAmmoCount, heavyAmmoCount, shotgunAmmoCount, maxLightAmmoCount, maxMediumAmmoCount, maxHeavyAmmoCount, maxShotgunAmmoCount;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
@@ -105,7 +105,7 @@ public class PlayerCombat : MonoBehaviour
 
     void Start()
     {
-        //SubscribeToInputEvents();
+        SubscribeToInputEvents();
     }
 
     void OnEnable()

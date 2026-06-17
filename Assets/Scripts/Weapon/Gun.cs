@@ -167,6 +167,7 @@ public class Gun : MonoBehaviour
                     {
                         _currentClipAmmo--;
                         _timeOfLastShot = Time.time;
+                        Debug.Log($"newCursorPositon: {newCursorPosition}");
                         FireHitscanShot(newCursorPosition);
                     }
                     else if (_currentClipAmmo <= 0 && !_lastTriggerPulled && !_isReloading)
@@ -235,7 +236,8 @@ public class Gun : MonoBehaviour
 
         if (_muzzleFlash)
             _muzzleFlash.Play();
-        _audioSource.PlayOneShot(_fireSound, SettingsManager.instance.sfxVolume);
+        if (_audioSource != null && _fireSound != null)
+            _audioSource.PlayOneShot(_fireSound, SettingsManager.instance.sfxVolume);
     }
 
     public void PullTrigger(Vector3 cursorPosition)
